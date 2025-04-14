@@ -1,35 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Register from "./pages/Register.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+// Trang 404 đơn giản
+const NotFound = () => (
+  <div style={{ textAlign: "center", marginTop: "4rem" }}>
+    <h1>404 - Trang không tồn tại</h1>
+    <p>Vui lòng kiểm tra lại đường dẫn.</p>
+  </div>
+);
 
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <Routes>
+        {/* Trang chính (/) chuyển hướng sang /register */}
+        <Route path="/" element={<Navigate to="/register" replace />} />
+        
+        {/* Trang đăng ký */}
+        <Route path="/register" element={<Register />} />
+        
+        {/* Trang không tồn tại */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
+  );
 }
-
-export default App
