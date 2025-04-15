@@ -6,12 +6,10 @@ export default function LoginForm() {
   const [formData, setFormData] = useState({
     cccd: '', // Thay email bằng cccd
     password: '',
-    confirmPassword: '',
   });
 
   // State để kiểm soát hiển thị mật khẩu
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // State để hiển thị thông báo lỗi
   const [errors, setErrors] = useState({});
@@ -54,13 +52,6 @@ export default function LoginForm() {
       newErrors.password = "Mật khẩu không được chứa các ký tự ă, â, ơ, ô, đ";
     }
 
-    // Kiểm tra xác nhận mật khẩu
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Vui lòng nhập lại mật khẩu";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Mật khẩu và xác nhận mật khẩu không khớp";
-    }
-
     return newErrors;
   };
 
@@ -78,7 +69,6 @@ export default function LoginForm() {
       setFormData({
         cccd: '',
         password: '',
-        confirmPassword: '',
       });
       setFormSubmitted(false);
       // Ở đây bạn có thể gửi API request đến server
@@ -134,7 +124,7 @@ export default function LoginForm() {
             {/* Mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Mật khẩu</label>
-              <div className="flex-grow relative flex items-center">
+              <div className="flex-grow flex items-center">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -149,28 +139,6 @@ export default function LoginForm() {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? "🔒" : "👁️"}
-                </button>
-              </div>
-            </div>
-
-            {/* Xác nhận mật khẩu */}
-            <div className="mb-4 flex items-start">
-              <label className="w-32 text-gray-700 mt-3 font-medium">Xác nhận mật khẩu</label>
-              <div className="flex-grow relative flex items-center">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  className={getInputClassName("confirmPassword")}
-                  placeholder="Nhập lại mật khẩu"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                <button
-                  type="button"
-                  className="ml-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? "🔒" : "👁️"}
                 </button>
               </div>
             </div>
@@ -194,75 +162,6 @@ export default function LoginForm() {
           </form>
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="bg-[#0056B3] text-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-            {/* Cột 1: Về chúng tôi */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Về chúng tôi</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Giới thiệu</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Các trường thành viên</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Tin tức & Sự kiện</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Liên hệ</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 2: Kì thi ĐGNL */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Kì thi ĐGNL</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Thông tin kỳ thi</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Lịch thi</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Cấu trúc đề thi</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Quy chế thi</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 3: Xét tuyển */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Xét tuyển</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Quy chế xét tuyển</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Chỉ tiêu tuyển sinh</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Điểm chuẩn tham khảo</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Hướng dẫn đăng ký</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 4: Tài nguyên */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Tài nguyên</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Thư viện số</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Bài thi thử</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Diễn đàn học tập</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Hỏi đáp thường gặp</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 5: Kết nối với chúng tôi */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Kết nối với chúng tôi</h3>
-              <div className="flex space-x-4">
-                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
-                  <i className="fab fa-facebook-f text-[#0056B3]"></i>
-                </a>
-                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
-                  <i className="fab fa-twitter text-[#0056B3]"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Dòng bản quyền */}
-          <div className="border-t border-blue-400 mt-6 pt-6 text-center text-sm text-white">
-            © 2025 VNUHCM-UNIGATE | Cổng thông tin tuyển sinh thông minh ĐHQG TP.HCM | Đăng ký bản quyền.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

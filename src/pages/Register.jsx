@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer"; // Import Footer component
 
 export default function RegistrationForm() {
   // State để lưu dữ liệu form
@@ -244,12 +245,12 @@ export default function RegistrationForm() {
             {/* Mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Mật khẩu</label>
-              <div className="flex-grow relative flex items-center">
+              <div className="flex-grow flex items-center">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   className={getInputClassName("password")}
-                  placeholder="Nhập mật khẩu"
+                  placeholder="Nhập mật khẩu (tối thiểu 8 ký tự)"
                   value={formData.password}
                   onChange={handleChange}
                 />
@@ -261,12 +262,13 @@ export default function RegistrationForm() {
                   {showPassword ? "🔒" : "👁️"}
                 </button>
               </div>
+              {errors.password && <p className="text-red-500 text-sm mt-1 font-medium">{errors.password}</p>}
             </div>
 
             {/* Xác nhận mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Xác nhận mật khẩu</label>
-              <div className="flex-grow relative flex items-center">
+              <div className="flex-grow flex items-center">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
@@ -283,6 +285,7 @@ export default function RegistrationForm() {
                   {showConfirmPassword ? "🔒" : "👁️"}
                 </button>
               </div>
+              {errors.confirmPassword && <p className="text-red-500 text-sm mt-1 font-medium">{errors.confirmPassword}</p>}
             </div>
 
             {/* Checkbox Điều khoản */}
@@ -330,75 +333,6 @@ export default function RegistrationForm() {
           </form>
         </div>
       </div>
-
-      {/* Footer - Updated */}
-      <footer className="bg-[#0056B3] text-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-            {/* Cột 1: Về chúng tôi */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Về chúng tôi</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Giới thiệu</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Các trường thành viên</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Tin tức & Sự kiện</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Liên hệ</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 2: Kì thi ĐGNL */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Kì thi ĐGNL</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Thông tin kỳ thi</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Lịch thi</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Cấu trúc đề thi</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Quy chế thi</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 3: Xét tuyển */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Xét tuyển</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Quy chế xét tuyển</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Chỉ tiêu tuyển sinh</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Điểm chuẩn tham khảo</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Hướng dẫn đăng ký</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 4: Tài nguyên */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Tài nguyên</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-white hover:underline">Thư viện số</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Bài thi thử</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Diễn đàn học tập</a></li>
-                <li><a href="#" className="text-sm text-white hover:underline">Hỏi đáp thường gặp</a></li>
-              </ul>
-            </div>
-
-            {/* Cột 5: Kết nối với chúng tôi */}
-            <div>
-              <h3 className="font-bold text-lg mb-3">Kết nối với chúng tôi</h3>
-              <div className="flex space-x-4">
-                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
-                  <i className="fab fa-facebook-f text-[#0056B3]"></i>
-                </a>
-                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
-                  <i className="fab fa-twitter text-[#0056B3]"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Dòng bản quyền */}
-          <div className="border-t border-blue-400 mt-6 pt-6 text-center text-sm text-white">
-            © 2025 VNUHCM-UNIGATE | Cổng thông tin tuyển sinh thông minh ĐHQG TP.HCM | Đăng ký bản quyền.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
