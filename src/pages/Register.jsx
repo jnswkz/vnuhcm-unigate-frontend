@@ -68,47 +68,59 @@ export default function RegistrationForm() {
   // Hàm xác thực form
   const validateForm = () => {
     const newErrors = {};
-    
+
+    // Kiểm tra CCCD
     if (!formData.cccd) {
-      newErrors.cccd = 'Vui lòng nhập số CCCD';
+      newErrors.cccd = "Vui lòng nhập số CCCD";
+    } else if (!/^\d{12}$/.test(formData.cccd)) {
+      newErrors.cccd = "Số CCCD phải gồm 12 chữ số và không chứa chữ cái";
     }
-    
+
+    // Kiểm tra họ và tên
     if (!formData.fullName) {
-      newErrors.fullName = 'Vui lòng nhập họ và tên';
+      newErrors.fullName = "Vui lòng nhập họ và tên";
     }
-    
+
+    // Kiểm tra email
     if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
+      newErrors.email = "Vui lòng nhập email";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = "Email không hợp lệ";
     }
-    
+
+    // Kiểm tra số điện thoại
     if (!formData.phone) {
-      newErrors.phone = 'Vui lòng nhập số điện thoại';
-    } else if (!/^[0-9]{10,11}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Số điện thoại không hợp lệ';
+      newErrors.phone = "Vui lòng nhập số điện thoại";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Số điện thoại phải gồm 10 chữ số";
     }
-    
+
+    // Kiểm tra mật khẩu
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = "Vui lòng nhập mật khẩu";
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 8 ký tự';
+      newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự";
+    } else if (/[ăâêôơưđáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i.test(formData.password)) {
+      newErrors.password = "Mật khẩu không được chứa các ký tự tiếng Việt có dấu";
     }
-    
+
+    // Kiểm tra xác nhận mật khẩu
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Mật khẩu không khớp';
+      newErrors.confirmPassword = "Mật khẩu không khớp";
     }
-    
+
+    // Kiểm tra checkbox điều khoản
     if (!agreeTerms) {
-      newErrors.agreeTerms = 'Bạn phải đồng ý với điều khoản sử dụng';
+      newErrors.agreeTerms = "Bạn phải đồng ý với điều khoản sử dụng";
     }
-    
+
+    // Kiểm tra checkbox không phải robot
     if (!notRobot) {
-      newErrors.notRobot = 'Vui lòng xác nhận bạn không phải là robot';
+      newErrors.notRobot = "Vui lòng xác nhận bạn không phải là robot";
     }
-    
+
     return newErrors;
   };
 
@@ -151,7 +163,6 @@ export default function RegistrationForm() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header - Updated color to #0056B3 */}
       <header className="bg-[#0056B3] text-white px-6 py-4 flex justify-between items-center">
         <div className="font-bold text-lg">VNUHCM - UNIGATE</div>
         <div className="font-bold text-lg flex-grow text-center">ĐĂNG KÍ TÀI KHOẢN</div>
@@ -322,32 +333,71 @@ export default function RegistrationForm() {
         </div>
       </div>
 
-      {/* Footer - Added with color #0056B3 */}
-      <footer className="bg-[#0056B3] text-white p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Footer - Updated */}
+      <footer className="bg-[#0056B3] text-white py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+            {/* Cột 1: Về chúng tôi */}
             <div>
-              <h3 className="font-bold text-lg mb-3">VNUHCM - UNIGATE</h3>
-              <p className="text-sm">Trường Đại học Công nghệ Thông tin</p>
-              <p className="text-sm mt-2">Khu phố 6, P.Linh Trung, Tp.Thủ Đức, Tp.Hồ Chí Minh</p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-3">Liên hệ</h3>
-              <p className="text-sm">Email: support@vnuhcm.edu.vn</p>
-              <p className="text-sm mt-2">Điện thoại: (028) 3724 2160</p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-3">Truy cập nhanh</h3>
+              <h3 className="font-bold text-lg mb-3">Về chúng tôi</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm hover:underline">Trang chủ</a></li>
-                <li><a href="#" className="text-sm hover:underline">Đăng nhập</a></li>
-                <li><a href="#" className="text-sm hover:underline">Điều khoản sử dụng</a></li>
-                <li><a href="#" className="text-sm hover:underline">Chính sách bảo mật</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Giới thiệu</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Các trường thành viên</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Tin tức & Sự kiện</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Liên hệ</a></li>
               </ul>
             </div>
+
+            {/* Cột 2: Kì thi ĐGNL */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Kì thi ĐGNL</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-white hover:underline">Thông tin kỳ thi</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Lịch thi</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Cấu trúc đề thi</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Quy chế thi</a></li>
+              </ul>
+            </div>
+
+            {/* Cột 3: Xét tuyển */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Xét tuyển</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-white hover:underline">Quy chế xét tuyển</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Chỉ tiêu tuyển sinh</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Điểm chuẩn tham khảo</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Hướng dẫn đăng ký</a></li>
+              </ul>
+            </div>
+
+            {/* Cột 4: Tài nguyên */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Tài nguyên</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-white hover:underline">Thư viện số</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Bài thi thử</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Diễn đàn học tập</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Hỏi đáp thường gặp</a></li>
+              </ul>
+            </div>
+
+            {/* Cột 5: Kết nối với chúng tôi */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Kết nối với chúng tôi</h3>
+              <div className="flex space-x-4">
+                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
+                  <i className="fab fa-facebook-f text-[#0056B3]"></i>
+                </a>
+                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
+                  <i className="fab fa-twitter text-[#0056B3]"></i>
+                </a>
+              </div>
+            </div>
           </div>
-          <div className="border-t border-blue-400 mt-6 pt-6 text-center text-sm">
-            © 2025 VNUHCM-UNIGATE. Tất cả quyền được bảo lưu.
+
+          {/* Dòng bản quyền */}
+          <div className="border-t border-blue-400 mt-6 pt-6 text-center text-sm text-white">
+            © 2025 VNUHCM-UNIGATE | Cổng thông tin tuyển sinh thông minh ĐHQG TP.HCM | Đăng ký bản quyền.
           </div>
         </div>
       </footer>

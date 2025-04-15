@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function LoginForm() {
   // State để lưu dữ liệu form
   const [formData, setFormData] = useState({
-    email: '',
+    cccd: '', // Thay email bằng cccd
     password: '',
   });
 
@@ -38,14 +38,18 @@ export default function LoginForm() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+    // Kiểm tra CCCD
+    if (!formData.cccd) {
+      newErrors.cccd = "Vui lòng nhập số CCCD";
+    } else if (!/^\d{12}$/.test(formData.cccd)) {
+      newErrors.cccd = "Số CCCD phải gồm 12 chữ số và không chứa chữ cái";
     }
 
+    // Kiểm tra mật khẩu
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = "Vui lòng nhập mật khẩu";
+    } else if (/[ăâơôđ]/i.test(formData.password)) {
+      newErrors.password = "Mật khẩu không được chứa các ký tự ă, â, ơ, ô, đ";
     }
 
     return newErrors;
@@ -63,7 +67,7 @@ export default function LoginForm() {
       console.log('Form data submitted:', formData);
       // Reset form sau khi đăng nhập thành công
       setFormData({
-        email: '',
+        cccd: '',
         password: '',
       });
       setFormSubmitted(false);
@@ -99,20 +103,20 @@ export default function LoginForm() {
       <div className="flex-grow">
         <div className="max-w-3xl mx-auto my-6 bg-blue-50 p-8 rounded shadow-md w-full">
           <form onSubmit={handleSubmit}>
-            {/* Email */}
+            {/* CCCD */}
             <div className="mb-4 flex items-start">
-              <label className="w-32 text-gray-700 mt-3 font-medium">Email</label>
+              <label className="w-32 text-gray-700 mt-3 font-medium">Số CCCD</label>
               <div className="flex-grow">
                 <input
-                  type="email"
-                  name="email"
-                  className={getInputClassName('email')}
-                  placeholder="Nhập email"
-                  value={formData.email}
+                  type="text"
+                  name="cccd"
+                  className={getInputClassName('cccd')}
+                  placeholder="Nhập số CCCD"
+                  value={formData.cccd}
                   onChange={handleChange}
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1 font-medium">{errors.email}</p>
+                {errors.cccd && (
+                  <p className="text-red-500 text-sm mt-1 font-medium">{errors.cccd}</p>
                 )}
               </div>
             </div>
@@ -163,49 +167,70 @@ export default function LoginForm() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#0056B3] text-white p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <footer className="bg-[#0056B3] text-white py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+            {/* Cột 1: Về chúng tôi */}
             <div>
-              <h3 className="font-bold text-lg mb-3">VNUHCM - UNIGATE</h3>
-              <p className="text-sm">Trường Đại học Công nghệ Thông tin</p>
-              <p className="text-sm mt-2">
-                Khu phố 6, P.Linh Trung, Tp.Thủ Đức, Tp.Hồ Chí Minh
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-3">Liên hệ</h3>
-              <p className="text-sm">Email: support@vnuhcm.edu.vn</p>
-              <p className="text-sm mt-2">Điện thoại: (028) 3724 2160</p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-3">Truy cập nhanh</h3>
+              <h3 className="font-bold text-lg mb-3">Về chúng tôi</h3>
               <ul className="space-y-2">
-                <li>
-                  <a href="#" className="text-sm hover:underline">
-                    Trang chủ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm hover:underline">
-                    Đăng ký
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm hover:underline">
-                    Điều khoản sử dụng
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm hover:underline">
-                    Chính sách bảo mật
-                  </a>
-                </li>
+                <li><a href="#" className="text-sm text-white hover:underline">Giới thiệu</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Các trường thành viên</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Tin tức & Sự kiện</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Liên hệ</a></li>
               </ul>
             </div>
+
+            {/* Cột 2: Kì thi ĐGNL */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Kì thi ĐGNL</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-white hover:underline">Thông tin kỳ thi</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Lịch thi</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Cấu trúc đề thi</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Quy chế thi</a></li>
+              </ul>
+            </div>
+
+            {/* Cột 3: Xét tuyển */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Xét tuyển</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-white hover:underline">Quy chế xét tuyển</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Chỉ tiêu tuyển sinh</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Điểm chuẩn tham khảo</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Hướng dẫn đăng ký</a></li>
+              </ul>
+            </div>
+
+            {/* Cột 4: Tài nguyên */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Tài nguyên</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-white hover:underline">Thư viện số</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Bài thi thử</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Diễn đàn học tập</a></li>
+                <li><a href="#" className="text-sm text-white hover:underline">Hỏi đáp thường gặp</a></li>
+              </ul>
+            </div>
+
+            {/* Cột 5: Kết nối với chúng tôi */}
+            <div>
+              <h3 className="font-bold text-lg mb-3">Kết nối với chúng tôi</h3>
+              <div className="flex space-x-4">
+                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
+                  <i className="fab fa-facebook-f text-[#0056B3]"></i>
+                </a>
+                <a href="#" className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400">
+                  <i className="fab fa-twitter text-[#0056B3]"></i>
+                </a>
+              </div>
+            </div>
           </div>
-          <div className="border-t border-blue-400 mt-6 pt-6 text-center text-sm">
-            © 2025 VNUHCM-UNIGATE. Tất cả quyền được bảo lưu.
+
+          {/* Dòng bản quyền */}
+          <div className="border-t border-blue-400 mt-6 pt-6 text-center text-sm text-white">
+            © 2025 VNUHCM-UNIGATE | Cổng thông tin tuyển sinh thông minh ĐHQG TP.HCM | Đăng ký bản quyền.
           </div>
         </div>
       </footer>
