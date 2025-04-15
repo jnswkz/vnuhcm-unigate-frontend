@@ -244,46 +244,44 @@ export default function RegistrationForm() {
             {/* Mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Mật khẩu</label>
-              <div className="flex-grow relative">
+              <div className="flex-grow relative flex items-center">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className={getInputClassName('password')}
-                  placeholder="Nhập mật khẩu (tối thiểu 8 ký tự)"
+                  className={getInputClassName("password")}
+                  placeholder="Nhập mật khẩu"
                   value={formData.password}
                   onChange={handleChange}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  className="ml-3 text-gray-500 hover:text-gray-700 focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? '🔒' : '👁️'}
+                  {showPassword ? "🔒" : "👁️"}
                 </button>
-                {errors.password && <p className="text-red-500 text-sm mt-1 font-medium">{errors.password}</p>}
               </div>
             </div>
 
             {/* Xác nhận mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Xác nhận mật khẩu</label>
-              <div className="flex-grow relative">
+              <div className="flex-grow relative flex items-center">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
-                  className={getInputClassName('confirmPassword')}
+                  className={getInputClassName("confirmPassword")}
                   placeholder="Nhập lại mật khẩu"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  className="ml-3 text-gray-500 hover:text-gray-700 focus:outline-none"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? '🔒' : '👁️'}
+                  {showConfirmPassword ? "🔒" : "👁️"}
                 </button>
-                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1 font-medium">{errors.confirmPassword}</p>}
               </div>
             </div>
 

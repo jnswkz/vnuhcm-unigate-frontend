@@ -6,10 +6,12 @@ export default function LoginForm() {
   const [formData, setFormData] = useState({
     cccd: '', // Thay email bằng cccd
     password: '',
+    confirmPassword: '',
   });
 
   // State để kiểm soát hiển thị mật khẩu
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // State để hiển thị thông báo lỗi
   const [errors, setErrors] = useState({});
@@ -52,6 +54,13 @@ export default function LoginForm() {
       newErrors.password = "Mật khẩu không được chứa các ký tự ă, â, ơ, ô, đ";
     }
 
+    // Kiểm tra xác nhận mật khẩu
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Vui lòng nhập lại mật khẩu";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu và xác nhận mật khẩu không khớp";
+    }
+
     return newErrors;
   };
 
@@ -69,6 +78,7 @@ export default function LoginForm() {
       setFormData({
         cccd: '',
         password: '',
+        confirmPassword: '',
       });
       setFormSubmitted(false);
       // Ở đây bạn có thể gửi API request đến server
@@ -124,25 +134,44 @@ export default function LoginForm() {
             {/* Mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Mật khẩu</label>
-              <div className="flex-grow relative">
+              <div className="flex-grow relative flex items-center">
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
-                  className={getInputClassName('password')}
+                  className={getInputClassName("password")}
                   placeholder="Nhập mật khẩu"
                   value={formData.password}
                   onChange={handleChange}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  className="ml-3 text-gray-500 hover:text-gray-700 focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? '🔒' : '👁️'}
+                  {showPassword ? "🔒" : "👁️"}
                 </button>
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1 font-medium">{errors.password}</p>
-                )}
+              </div>
+            </div>
+
+            {/* Xác nhận mật khẩu */}
+            <div className="mb-4 flex items-start">
+              <label className="w-32 text-gray-700 mt-3 font-medium">Xác nhận mật khẩu</label>
+              <div className="flex-grow relative flex items-center">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  className={getInputClassName("confirmPassword")}
+                  placeholder="Nhập lại mật khẩu"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  className="ml-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? "🔒" : "👁️"}
+                </button>
               </div>
             </div>
 
