@@ -1,27 +1,39 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Register from "./pages/Register.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import HeroSection from "./pages/HeroSection";
+import LoginForm from "./pages/login";
+import RegistrationForm from "./pages/Register";
 
-// Trang 404 đơn giản
-const NotFound = () => (
-  <div style={{ textAlign: "center", marginTop: "4rem" }}>
-    <h1>404 - Trang không tồn tại</h1>
-    <p>Vui lòng kiểm tra lại đường dẫn.</p>
-  </div>
-);
+function MainLayout({ children }) {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      {children}
+      <Footer />
+    </div>
+  );
+}
+
+function HomePage() {
+  return (
+    <main className="flex-grow">
+      <HeroSection />
+      {/* Các thành phần khác của trang chủ */}
+    </main>
+  );
+}
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        {/* Trang chính (/) chuyển hướng sang /register */}
-        <Route path="/" element={<Navigate to="/register" replace />} />
-        
-        {/* Trang đăng ký */}
-        <Route path="/register" element={<Register />} />
-        
-        {/* Trang không tồn tại */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <MainLayout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/dang-nhap" element={<LoginForm />} />
+          <Route path="/dang-ky" element={<RegistrationForm />} />
+        </Routes>
+      </MainLayout>
     </Router>
   );
 }
