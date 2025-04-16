@@ -56,21 +56,42 @@ export default function LoginForm() {
   };
 
   // Hàm xử lý submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length === 0) {
       // Xử lý đăng nhập thành công
-      alert('Đăng nhập thành công!');
-      console.log('Form data submitted:', formData);
-      // Reset form sau khi đăng nhập thành công
-      setFormData({
-        cccd: '',
-        password: '',
-      });
-      setFormSubmitted(false);
+      const param = new URLSearchParams({
+        cccd: formData.cccd,
+        password: formData.password,
+      })
+      const response = await fetch(`http://localhost:8000/api/authenticate-user?${param}`, {method: 'GET'});
+      const data = await response.json();
+      const status = data.message;
+      console.log('Response:', data);
+      if (status === "User authenticated successfully") 
+      {
+        alert('Đăng nhập thành công!');
+        console.log('Form data submitted:', formData);
+        // Reset form sau khi đăng nhập thành công
+        setFormData({
+          cccd: '',
+          password: '',
+        });
+        setFormSubmitted(false);
+      }
+      else{
+        alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin đăng nhập.');
+        console.log('Form data submitted:', formData);
+        // Reset form sau khi đăng nhập thành công
+        setFormData({
+          cccd: '',
+          password: '',
+        });
+        setFormSubmitted(false);
+      }
       // Ở đây bạn có thể gửi API request đến server
     } else {
       setErrors(validationErrors);
