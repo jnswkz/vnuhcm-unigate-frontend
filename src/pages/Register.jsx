@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify'; // Import Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS của Toastify
 import Footer from "../components/Footer"; // Import Footer component
 
 export default function RegistrationForm() {
-  // State để lưu dữ liệu form
   const [formData, setFormData] = useState({
     cccd: '',
     fullName: '',
@@ -13,29 +14,20 @@ export default function RegistrationForm() {
     confirmPassword: ''
   });
 
-  // State để kiểm soát hiển thị mật khẩu
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // State cho checkbox
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [notRobot, setNotRobot] = useState(false);
-
-  // State để hiển thị thông báo lỗi
   const [errors, setErrors] = useState({});
-  
-  // State để kiểm soát khi form được submit
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Hàm xử lý thay đổi input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
     });
-    
-    // Xóa lỗi của trường vừa được cập nhật nếu form đã được submit trước đó
+
     if (formSubmitted) {
       setErrors(prev => ({
         ...prev,
@@ -44,7 +36,6 @@ export default function RegistrationForm() {
     }
   };
 
-  // Hàm xử lý thay đổi checkbox
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     if (name === 'agreeTerms') {
@@ -66,37 +57,31 @@ export default function RegistrationForm() {
     }
   };
 
-  // Hàm xác thực form
   const validateForm = () => {
     const newErrors = {};
 
-    // Kiểm tra CCCD
     if (!formData.cccd) {
       newErrors.cccd = "Vui lòng nhập số CCCD";
     } else if (!/^\d{12}$/.test(formData.cccd)) {
       newErrors.cccd = "Số CCCD phải gồm 12 chữ số và không chứa chữ cái";
     }
 
-    // Kiểm tra họ và tên
     if (!formData.fullName) {
       newErrors.fullName = "Vui lòng nhập họ và tên";
     }
 
-    // Kiểm tra email
     if (!formData.email) {
       newErrors.email = "Vui lòng nhập email";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email không hợp lệ";
     }
 
-    // Kiểm tra số điện thoại
     if (!formData.phone) {
       newErrors.phone = "Vui lòng nhập số điện thoại";
     } else if (!/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = "Số điện thoại phải gồm 10 chữ số";
     }
 
-    // Kiểm tra mật khẩu
     if (!formData.password) {
       newErrors.password = "Vui lòng nhập mật khẩu";
     } else if (formData.password.length < 8) {
@@ -105,19 +90,16 @@ export default function RegistrationForm() {
       newErrors.password = "Mật khẩu không được chứa các ký tự tiếng Việt có dấu";
     }
 
-    // Kiểm tra xác nhận mật khẩu
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Mật khẩu không khớp";
     }
 
-    // Kiểm tra checkbox điều khoản
     if (!agreeTerms) {
       newErrors.agreeTerms = "Bạn phải đồng ý với điều khoản sử dụng";
     }
 
-    // Kiểm tra checkbox không phải robot
     if (!notRobot) {
       newErrors.notRobot = "Vui lòng xác nhận bạn không phải là robot";
     }
@@ -125,17 +107,22 @@ export default function RegistrationForm() {
     return newErrors;
   };
 
-  // Hàm xử lý submit form
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormSubmitted(true);
     const validationErrors = validateForm();
-    
+
     if (Object.keys(validationErrors).length === 0) {
-      // Xử lý đăng ký thành công
-      alert('Đăng ký thành công!');
-      console.log('Form data submitted:', formData);
-      // Reset form sau khi đăng ký thành công
+      toast.success('Đăng ký thành công!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       setFormData({
         cccd: '',
         fullName: '',
@@ -147,17 +134,24 @@ export default function RegistrationForm() {
       setAgreeTerms(false);
       setNotRobot(false);
       setFormSubmitted(false);
-      // Ở đây bạn có thể gửi API request đến server
     } else {
       setErrors(validationErrors);
+      toast.error('Vui lòng kiểm tra lại thông tin!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
-  // Quyết định class cho input fields
   const getInputClassName = (fieldName) => {
     return `w-full p-3 rounded ${
-      errors[fieldName] 
-        ? 'border-2 border-red-500 bg-red-50 text-red-700' 
+      errors[fieldName]
+        ? 'border-2 border-red-500 bg-red-50 text-red-700'
         : 'border border-gray-300 bg-white text-gray-800'
     } focus:ring-2 focus:ring-blue-500 focus:border-transparent`;
   };
@@ -174,7 +168,6 @@ export default function RegistrationForm() {
         </div>
       </header>
 
-      {/* Form Container */}
       <div className="flex-grow">
         <div className="max-w-3xl mx-auto my-6 bg-blue-50 p-8 rounded shadow-md w-full">
           <form onSubmit={handleSubmit}>
@@ -333,6 +326,7 @@ export default function RegistrationForm() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

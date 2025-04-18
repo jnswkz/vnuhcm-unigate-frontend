@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify'; // Import Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS của Toastify
 
 export default function LoginForm() {
-  // State để lưu dữ liệu form
   const [formData, setFormData] = useState({
-    cccd: '', // Thay email bằng cccd
+    cccd: '',
     password: '',
   });
 
-  // State để kiểm soát hiển thị mật khẩu
   const [showPassword, setShowPassword] = useState(false);
-
-  // State để hiển thị thông báo lỗi
   const [errors, setErrors] = useState({});
-
-  // State để kiểm soát khi form được submit
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Hàm xử lý thay đổi input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -25,7 +20,6 @@ export default function LoginForm() {
       [name]: value,
     });
 
-    // Xóa lỗi của trường vừa được cập nhật nếu form đã được submit trước đó
     if (formSubmitted) {
       setErrors((prev) => ({
         ...prev,
@@ -34,18 +28,15 @@ export default function LoginForm() {
     }
   };
 
-  // Hàm xác thực form
   const validateForm = () => {
     const newErrors = {};
 
-    // Kiểm tra CCCD
     if (!formData.cccd) {
       newErrors.cccd = "Vui lòng nhập số CCCD";
     } else if (!/^\d{12}$/.test(formData.cccd)) {
       newErrors.cccd = "Số CCCD phải gồm 12 chữ số và không chứa chữ cái";
     }
 
-    // Kiểm tra mật khẩu
     if (!formData.password) {
       newErrors.password = "Vui lòng nhập mật khẩu";
     } else if (/[ăâơôđ]/i.test(formData.password)) {
@@ -55,50 +46,56 @@ export default function LoginForm() {
     return newErrors;
   };
 
-  // Hàm xử lý submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length === 0) {
-      // Xử lý đăng nhập thành công
       const param = new URLSearchParams({
         cccd: formData.cccd,
         password: formData.password,
-      })
-      const response = await fetch(`http://localhost:8000/api/authenticate-user?${param}`, {method: 'GET'});
+      });
+      const response = await fetch(`http://localhost:8000/api/authenticate-user?${param}`, { method: 'GET' });
       const data = await response.json();
       const status = data.message;
-      console.log('Response:', data);
-      if (status === "User authenticated successfully") 
-      {
-        alert('Đăng nhập thành công!');
-        console.log('Form data submitted:', formData);
-        // Reset form sau khi đăng nhập thành công
+
+      if (status === "User authenticated successfully") {
+        toast.success('Đăng nhập thành công!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setFormData({
+          cccd: '',
+          password: '',
+        });
+        setFormSubmitted(false);
+      } else {
+        toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin đăng nhập.', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         setFormData({
           cccd: '',
           password: '',
         });
         setFormSubmitted(false);
       }
-      else{
-        alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin đăng nhập.');
-        console.log('Form data submitted:', formData);
-        // Reset form sau khi đăng nhập thành công
-        setFormData({
-          cccd: '',
-          password: '',
-        });
-        setFormSubmitted(false);
-      }
-      // Ở đây bạn có thể gửi API request đến server
     } else {
       setErrors(validationErrors);
     }
   };
 
-  // Quyết định class cho input fields
   const getInputClassName = (fieldName) => {
     return `w-full p-3 rounded ${
       errors[fieldName]
@@ -109,7 +106,6 @@ export default function LoginForm() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
       <header className="bg-[#0056B3] text-white px-6 py-4 flex justify-between items-center">
         <div className="font-bold text-lg">VNUHCM - UNIGATE</div>
         <div className="font-bold text-lg flex-grow text-center">ĐĂNG NHẬP TÀI KHOẢN</div>
@@ -120,11 +116,9 @@ export default function LoginForm() {
         </div>
       </header>
 
-      {/* Form Container */}
       <div className="flex-grow">
         <div className="max-w-3xl mx-auto my-6 bg-blue-50 p-8 rounded shadow-md w-full">
           <form onSubmit={handleSubmit}>
-            {/* CCCD */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Số CCCD</label>
               <div className="flex-grow">
@@ -142,7 +136,6 @@ export default function LoginForm() {
               </div>
             </div>
 
-            {/* Mật khẩu */}
             <div className="mb-4 flex items-start">
               <label className="w-32 text-gray-700 mt-3 font-medium">Mật khẩu</label>
               <div className="flex-grow flex items-center">
@@ -164,14 +157,12 @@ export default function LoginForm() {
               </div>
             </div>
 
-            {/* Quên mật khẩu */}
             <div className="mb-4 flex justify-end">
               <a href="#" className="text-blue-700 hover:underline font-medium">
                 Quên mật khẩu?
               </a>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-center mt-6">
               <button
                 type="submit"
@@ -183,6 +174,7 @@ export default function LoginForm() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import ProfileCard from './ProfileCard';
 import ActionCard from './ActionCard';
 import NewsCard from './NewsCard';
 import Chatbot from './Chatbot';
+import { Link } from 'react-router-dom'; 
 
 export default function Dashboard() {
   const user = {
@@ -14,8 +15,8 @@ export default function Dashboard() {
     {
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M2 3H10V21H2V3Z" stroke="#FF9017" strokeWidth="2"/>
-          <path d="M12 3H20V21H12V3Z" stroke="#FF9017" strokeWidth="2"/>
+          <path d="M2 3H10V21H2V3Z" stroke="#FF9017" strokeWidth="2" />
+          <path d="M12 3H20V21H12V3Z" stroke="#FF9017" strokeWidth="2" />
         </svg>
       ),
       title: "Bài thi thử ĐGNL",
@@ -23,6 +24,7 @@ export default function Dashboard() {
       buttonText: "Làm bài thi thử",
       buttonColor: "#FF9017",
       borderColor: "#FFB459",
+      link: "/thi-thu", // Đường dẫn đến trang làm bài thi thử
     },
     {
       icon: (
@@ -87,18 +89,21 @@ export default function Dashboard() {
 
   const newsItems = [
     {
+      id: '1',
       image: "https://placehold.co/380x200",
       date: "15/03/2024",
       title: "Thông báo tuyển sinh năm học 2024-2025",
       description: "Đại học Quốc gia TP.HCM thông báo kế hoạch tuyển sinh đại học chính quy năm 2024 với nhiều phương thức xét tuyển mới.",
     },
     {
+      id: '2',
       image: "https://placehold.co/380x200",
       date: "10/03/2024",
       title: "Hướng dẫn đăng ký dự thi ĐGNL",
       description: "Chi tiết các bước đăng ký dự thi đánh giá năng lực, những lưu ý quan trọng và thời gian biểu cụ thể.",
     },
     {
+      id: '3',
       image: "https://placehold.co/380x200",
       date: "05/03/2024",
       title: "Thông tin ngành đào tạo mới",
@@ -140,18 +145,19 @@ export default function Dashboard() {
           Tin tức mới nhất
         </h2>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {newsItems.map((news, index) => (
-            <NewsCard key={index} {...news} />
+          {newsItems.map((news) => (
+            <NewsCard key={news.id} {...news} />
           ))}
         </div>
         <div className="mt-8 flex justify-center">
-          <button className="w-[190px] h-[52px] bg-[#0056B3] text-white text-[16px] font-roboto font-bold rounded-md hover:bg-[#004a99]">
+          <Link
+            to="/news" // Điều hướng đến trang NewsPage
+            className="w-[190px] h-[52px] bg-[#0056B3] text-white text-[16px] font-roboto font-bold rounded-md hover:bg-[#004a99] flex items-center justify-center mx-4"
+          >
             Xem tất cả tin tức
-          </button>
+          </Link>
         </div>
       </div>
-
-      {/* Chatbot */}
       <Chatbot />
     </div>
   );
