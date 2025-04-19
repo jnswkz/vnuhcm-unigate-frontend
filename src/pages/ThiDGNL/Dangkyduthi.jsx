@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,24 @@ const ExamRegistrationForm = () => {
     profileCode: '',
     examLocation: 'khanh-hoa',
   });
+
+  // Giả lập API lấy mã hồ sơ từ backend
+  useEffect(() => {
+    const fetchProfileCode = async () => {
+      try {
+        // Giả lập gọi API
+        const response = await new Promise((resolve) =>
+          setTimeout(() => resolve({ profileCode: 'ABC12345' }), 1000)
+        );
+        setFormData((prev) => ({ ...prev, profileCode: response.profileCode }));
+        toast.success('Mã hồ sơ đã được tải thành công!', { position: 'top-right', autoClose: 3000 });
+      } catch (error) {
+        toast.error('Không thể tải mã hồ sơ.', { position: 'top-right', autoClose: 3000 });
+      }
+    };
+
+    fetchProfileCode();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -93,9 +111,10 @@ const ExamRegistrationForm = () => {
             name="profileCode"
             aria-label="Mã hồ sơ dự thi"
             className="w-full h-[42px] bg-[#F3F4F6] border border-[#E5E7EB] rounded-md px-4"
-            placeholder="Nhập mã hồ sơ"
+            placeholder="Đang tải mã hồ sơ..."
             value={formData.profileCode}
             onChange={handleInputChange}
+            disabled // Không cho phép chỉnh sửa
           />
         </div>
 

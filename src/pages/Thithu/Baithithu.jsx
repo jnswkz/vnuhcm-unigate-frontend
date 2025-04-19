@@ -1,68 +1,71 @@
-// src/pages/MockTest.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function MockTest() {
-
-  const [currentQuestion, setCurrentQuestion] = useState(91); 
+  // State để quản lý câu hỏi hiện tại
+  const [currentQuestion, setCurrentQuestion] = useState(1); // Bắt đầu từ câu 1
   const totalQuestions = 120;
 
+  // State để quản lý phần thi được chọn
+  const [selectedSection, setSelectedSection] = useState(1); // Phần 1 được chọn mặc định
 
-  const [selectedSection, setSelectedSection] = useState(4); 
+  // State để quản lý đáp án được chọn cho từng câu hỏi
+  const [answers, setAnswers] = useState({}); // Lưu đáp án của từng câu hỏi (key: câu hỏi, value: chỉ số đáp án)
 
+  // State để quản lý thời gian (2 tiếng 30 phút = 9000 giây)
+  const [timeLeft, setTimeLeft] = useState(9000); // Thời gian còn lại tính bằng giây
 
-  const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(9000); 
+  // State để quản lý trạng thái modal
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false); // Modal nộp bài
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false); // Modal thoát
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false); // Modal kết quả
 
-  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false); 
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false); 
-  const [isResultModalOpen, setIsResultModalOpen] = useState(false); 
+  // Danh sách câu hỏi (giả lập từ 1 đến 30 cho Phần 1)
+  const questions = Array.from({ length: 30 }, (_, i) => i + 1); // Câu 1 đến 30
 
-  // Danh sách câu hỏi (giả lập từ 91 đến 120 cho Phần 4)
-  const questions = Array.from({ length: 30 }, (_, i) => i + 91); // Câu 91 đến 120
-
-  // Danh sách đáp án giả lập cho câu 91
+  // Danh sách đáp án giả lập cho câu 1
   const answerOptions = [
-    'Phương án A cho câu 91',
-    'Phương án B cho câu 91',
-    'Phương án C cho câu 91',
-    'Phương án D cho câu 91',
+    'Phương án A cho câu 1',
+    'Phương án B cho câu 1',
+    'Phương án C cho câu 1',
+    'Phương án D cho câu 1',
   ];
 
- 
+  // Tính số câu đã trả lời
   const answeredQuestions = Object.keys(answers).length;
-  const unansweredQuestions = totalQuestions - answeredQuestions; 
+  const unansweredQuestions = totalQuestions - answeredQuestions; // Số câu chưa trả lời
+
+  // Tính số câu đã trả lời cho từng phần
   const answeredPerSection = {
-    1: Object.keys(answers).filter((q) => parseInt(q) >= 1 && parseInt(q) <= 30).length, 
-    2: Object.keys(answers).filter((q) => parseInt(q) >= 31 && parseInt(q) <= 60).length, 
-    3: Object.keys(answers).filter((q) => parseInt(q) >= 61 && parseInt(q) <= 90).length, 
-    4: Object.keys(answers).filter((q) => parseInt(q) >= 91 && parseInt(q) <= 120).length,
+    1: Object.keys(answers).filter((q) => parseInt(q) >= 1 && parseInt(q) <= 30).length, // Phần 1: Câu 1-30
+    2: Object.keys(answers).filter((q) => parseInt(q) >= 31 && parseInt(q) <= 60).length, // Phần 2: Câu 31-60
+    3: Object.keys(answers).filter((q) => parseInt(q) >= 61 && parseInt(q) <= 90).length, // Phần 3: Câu 61-90
+    4: Object.keys(answers).filter((q) => parseInt(q) >= 91 && parseInt(q) <= 120).length, // Phần 4: Câu 91-120
   };
 
- 
-  const correctAnswers = answeredQuestions; 
+  // Tính số câu trả lời đúng (giả lập: tất cả câu đã trả lời đều đúng)
+  const correctAnswers = answeredQuestions; // Số câu đúng bằng số câu đã trả lời
 
- 
+  // Hook để điều hướng
   const navigate = useNavigate();
 
-  
+  // Logic giảm thời gian
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
           clearInterval(timer);
-          setIsResultModalOpen(true); 
+          setIsResultModalOpen(true); // Hiển thị modal kết quả khi hết thời gian
           return 0;
         }
         return prevTime - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timer); 
+    return () => clearInterval(timer); // Cleanup timer khi component unmount
   }, []);
 
-
+  // Hàm định dạng thời gian (từ giây sang HH:MM:SS)
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -70,92 +73,95 @@ export default function MockTest() {
     return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
+  // Hàm chuyển câu trước
   const handlePrevious = () => {
-    if (currentQuestion > 91) {
+    if (currentQuestion > 1) { // Giới hạn tối thiểu là câu 1
       setCurrentQuestion(currentQuestion - 1);
     }
   };
 
- 
+  // Hàm chuyển câu tiếp theo
   const handleNext = () => {
-    if (currentQuestion < 120) { 
+    if (currentQuestion < 30) { // Giới hạn tối đa là câu 30 cho Phần 1
       setCurrentQuestion(currentQuestion + 1);
     }
   };
 
-  
+  // Hàm chọn câu hỏi từ pagination
   const handleQuestionClick = (questionNumber) => {
     setCurrentQuestion(questionNumber);
   };
 
-
+  // Hàm chọn phần thi
   const handleSectionClick = (section) => {
     setSelectedSection(section);
-   
-    if (section === 1) setCurrentQuestion(1); 
-    if (section === 2) setCurrentQuestion(31); 
-    if (section === 3) setCurrentQuestion(61); 
-    if (section === 4) setCurrentQuestion(91); 
+    // Logic để cập nhật câu hỏi dựa trên phần thi
+    if (section === 1) setCurrentQuestion(1); // Phần 1: Câu 1-30
+    if (section === 2) setCurrentQuestion(31); // Phần 2: Câu 31-60
+    if (section === 3) setCurrentQuestion(61); // Phần 3: Câu 61-90
+    if (section === 4) setCurrentQuestion(91); // Phần 4: Câu 91-120
   };
 
- 
+  // Hàm chọn đáp án
   const handleAnswerChange = (index) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [currentQuestion]: index, 
+      [currentQuestion]: index, // Lưu đáp án cho câu hỏi hiện tại
     }));
   };
 
-  
+  // Hàm mở modal nộp bài
   const openSubmitModal = () => {
     setIsSubmitModalOpen(true);
   };
 
-
+  // Hàm đóng modal nộp bài
   const closeSubmitModal = () => {
     setIsSubmitModalOpen(false);
   };
 
-  
+  // Hàm xử lý nộp bài
   const handleSubmit = () => {
     closeSubmitModal();
-    setIsResultModalOpen(true); 
+    setIsResultModalOpen(true); // Hiển thị modal kết quả khi xác nhận nộp bài
   };
 
-
+  // Hàm mở modal thoát
   const openExitModal = () => {
     setIsExitModalOpen(true);
   };
 
-
+  // Hàm đóng modal thoát
   const closeExitModal = () => {
     setIsExitModalOpen(false);
   };
 
-  
+  // Hàm xử lý thoát
   const handleExit = () => {
     console.log('Thoát khỏi bài thi, tiến độ không được lưu.');
     closeExitModal();
-    navigate('/dashboard'); 
+    navigate('/dashboard'); // Điều hướng về trang dashboard
   };
 
-
+  // Hàm đóng modal kết quả
   const closeResultModal = () => {
     setIsResultModalOpen(false);
   };
 
+  // Hàm xử lý "Xem lại bài làm"
   const handleReview = () => {
     closeResultModal();
-    
+    // Logic xem lại bài làm (hiện tại giữ nguyên trang, bạn có thể điều hướng đến trang xem lại)
     console.log('Xem lại bài làm:', answers);
   };
 
-
+  // Hàm xử lý "Về trang chủ"
   const handleGoHome = () => {
     closeResultModal();
-    navigate('/dashboard'); 
+    navigate('/dashboard'); // Điều hướng về trang chủ
   };
 
+  // Xác định danh sách câu hỏi dựa trên phần thi
   const getQuestionsForSection = () => {
     if (selectedSection === 1) return Array.from({ length: 30 }, (_, i) => i + 1); // Câu 1-30
     if (selectedSection === 2) return Array.from({ length: 30 }, (_, i) => i + 31); // Câu 31-60
@@ -184,7 +190,7 @@ export default function MockTest() {
               className="h-5 w-5 mr-2"
               fill="none"
               stroke="currentColor"
-              viewBox="0 0 24 24"
+              viewBox="0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -245,9 +251,13 @@ export default function MockTest() {
           </div>
         </div>
 
+        {/* Nội dung chính và Pagination */}
         <div className="w-3/4 flex flex-col space-y-6">
+          {/* Ô Nội dung chính */}
           <div className="bg-white rounded-[8px] shadow-md p-6">
+            {/* Tiêu đề câu hỏi */}
             <h2 className="text-[18px] font-bold text-[#0056B3] mb-2">Câu {currentQuestion}</h2>
+            {/* Dòng phụ "Phần ..." */}
             <p className="text-[14px] text-[#666666] mb-4">
               {selectedSection === 1 && 'Phần 1: Tiếng Việt'}
               {selectedSection === 2 && 'Phần 2: Tiếng Anh'}
@@ -255,7 +265,7 @@ export default function MockTest() {
               {selectedSection === 4 && 'Phần 4: Tư duy khoa học'}
             </p>
 
-          
+            {/* Hiển thị dạng câu hỏi dựa trên phần thi */}
             {selectedSection === 4 ? (
               <>
                 {/* Thông tin bổ sung (context) */}
@@ -332,9 +342,9 @@ export default function MockTest() {
             <div className="flex justify-between mt-6">
               <button
                 onClick={handlePrevious}
-                disabled={currentQuestion === (selectedSection === 4 ? 91 : 1)}
+                disabled={currentQuestion === 1}
                 className={`py-2 px-4 rounded font-medium transition-colors ${
-                  currentQuestion === (selectedSection === 4 ? 91 : 1)
+                  currentQuestion === 1
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : 'bg-[#0056B3] text-white hover:bg-[#004494]'
                 }`}
@@ -343,9 +353,9 @@ export default function MockTest() {
               </button>
               <button
                 onClick={handleNext}
-                disabled={currentQuestion === (selectedSection === 4 ? 120 : 30)}
+                disabled={currentQuestion === 30}
                 className={`py-2 px-4 rounded font-medium transition-colors ${
-                  currentQuestion === (selectedSection === 4 ? 120 : 30)
+                  currentQuestion === 30
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : 'bg-[#0056B3] text-white hover:bg-[#004494]'
                 }`}
@@ -408,24 +418,18 @@ export default function MockTest() {
       {/* Modal Xác nhận nộp bài */}
       {isSubmitModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black opacity-50"
             onClick={closeSubmitModal}
           ></div>
-
-          {/* Modal Content */}
           <div className="bg-white rounded-lg shadow-lg p-6 w-[400px] z-50">
-            {/* Tiêu đề */}
             <h3 className="text-[18px] font-bold text-black mb-4">
               Xác nhận nộp bài
             </h3>
-            {/* Nội dung */}
             <p className="text-[16px] text-[#666666] mb-6">
               Bạn còn {unansweredQuestions} câu chưa trả lời.<br />
               Bạn có chắc chắn muốn nộp bài?
             </p>
-            {/* Nút điều hướng */}
             <div className="flex justify-end space-x-4">
               <button
                 onClick={closeSubmitModal}
@@ -447,23 +451,17 @@ export default function MockTest() {
       {/* Modal Xác nhận thoát */}
       {isExitModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black opacity-50"
             onClick={closeExitModal}
           ></div>
-
-          {/* Modal Content */}
           <div className="bg-white rounded-lg shadow-lg p-6 w-[400px] z-50">
-            {/* Tiêu đề */}
             <h3 className="text-[18px] font-bold text-black mb-4">
               Xác nhận thoát
             </h3>
-            {/* Nội dung */}
             <p className="text-[16px] text-[#666666] mb-6">
               Bạn có chắc chắn muốn thoát khỏi bài thi? Mọi câu trả lời sẽ không được lưu lại.
             </p>
-            {/* Nút điều hướng */}
             <div className="flex justify-end space-x-4">
               <button
                 onClick={closeExitModal}
@@ -485,28 +483,21 @@ export default function MockTest() {
       {/* Modal Kết quả bài thi */}
       {isResultModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black opacity-50"
             onClick={closeResultModal}
           ></div>
-
-          {/* Modal Content */}
           <div className="bg-white rounded-lg shadow-lg p-6 w-[500px] z-50">
-            {/* Tiêu đề */}
             <h3 className="text-[18px] font-bold text-[#0056B3] mb-4">
               Kết quả bài thi
             </h3>
-            {/* Số câu trả lời đúng */}
             <div className="bg-[#F0F7FF] p-4 rounded-lg mb-4 text-center">
               <p className="text-[16px] text-[#666666] mb-1">Số câu trả lời đúng</p>
               <p className="text-[24px] font-bold text-[#0056B3]">{correctAnswers}/{totalQuestions} câu</p>
             </div>
-            {/* Kết quả theo phần */}
             <div className="mb-6">
               <h4 className="text-[16px] font-bold text-black mb-2">Kết quả theo phần</h4>
               <div className="space-y-4">
-                {/* Phần 1: Tiếng Việt */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <p className="text-[14px] text-[#666666]">Phần 1: Tiếng Việt</p>
@@ -519,7 +510,6 @@ export default function MockTest() {
                     ></div>
                   </div>
                 </div>
-                {/* Phần 2: Tiếng Anh */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <p className="text-[14px] text-[#666666]">Phần 2: Tiếng Anh</p>
@@ -532,7 +522,6 @@ export default function MockTest() {
                     ></div>
                   </div>
                 </div>
-                {/* Phần 3: Toán học */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <p className="text-[14px] text-[#666666]">Phần 3: Toán học</p>
@@ -545,7 +534,6 @@ export default function MockTest() {
                     ></div>
                   </div>
                 </div>
-                {/* Phần 4: Tư duy khoa học */}
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <p className="text-[14px] text-[#666666]">Phần 4: Tư duy khoa học</p>
@@ -560,7 +548,6 @@ export default function MockTest() {
                 </div>
               </div>
             </div>
-            {/* Nút điều hướng */}
             <div className="flex justify-end space-x-4">
               <button
                 onClick={handleReview}

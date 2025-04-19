@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import ThongTinXetTuyen from './ThongTinXetTuyen';
 import NguyenVongXT from './NguyenVongXT';
 import KetQuaXT from './KetQuaXT';
-import HeaderDangNhap from '../../components/HeaderDangNhap';
-import Footer from '../../components/Footer';
+
 
 export default function Admission() {
     const [activeTab, setActiveTab] = useState('info'); // Tab mặc định là "Thông tin xét tuyển"

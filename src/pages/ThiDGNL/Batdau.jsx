@@ -335,7 +335,7 @@ const ExamSchedulePage = () => {
                           ) : !isRegistrationClosed ? (
                             <button
                               aria-label={`Đăng ký kỳ thi ${exam.title}`}
-                              className="px-4 py-2 bg-blue-700 text-white text-sm font-bold rounded hover:bg-blue-800 transition"
+                              className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#004494] transition"
                               onClick={() => handleRegister(exam)}
                             >
                               Đăng ký

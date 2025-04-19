@@ -22,7 +22,7 @@ const ProfilePage = () => {
     school: "THPT Nguyễn Thị Minh Khai",
     email: "thptnguyenthiminhkhai@example.com",
     phone: "0123456789",
-    priorityArea: "",
+    priorityArea: "", 
     priorityObject: "",
   });
 
@@ -123,19 +123,9 @@ const ProfilePage = () => {
               <label className="block text-[#6B7280] text-[16px] font-bold font-roboto mb-2">
                 CCCD
               </label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="cccd"
-                  value={tempData.cccd}
-                  onChange={handleChange}
-                  className="w-[544px] h-12 bg-[#F3F4F6] border border-[#D1D5DB] rounded-lg px-4 focus:outline-none focus:ring-2 focus:ring-[#0056B3] font-roboto"
-                />
-              ) : (
-                <div className="w-[544px] h-12 bg-[#F3F4F6] border border-[#D1D5DB] rounded-lg flex items-center px-4">
-                  <span className="text-[#6B7280] font-roboto">{profileData.cccd}</span>
-                </div>
-              )}
+              <div className="w-[544px] h-12 bg-[#F3F4F6] border border-[#D1D5DB] rounded-lg flex items-center px-4">
+                {profileData.cccd ? <span className="text-[#6B7280] font-roboto">{profileData.cccd}</span> : null}
+              </div>
             </div>
             <div className="mb-6">
               <label className="block text-gray-700 text-base font-bold font-roboto mb-2">
@@ -333,19 +323,17 @@ const ProfilePage = () => {
               <label className="block text-gray-700 text-base font-bold font-roboto mb-2">
                 Khu vực ưu tiên
               </label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="priorityArea"
-                  value={tempData.priorityArea}
-                  onChange={handleChange}
-                  className="w-[544px] h-12 bg-gray-100 border border-gray-300 rounded-lg px-4 focus:outline-none focus:ring-2 focus:ring-[#0056B3] font-roboto"
-                />
-              ) : (
-                <div className="w-[544px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center px-4">
-                  <span className="text-gray-700 font-roboto">{profileData.priorityArea}</span>
-                </div>
-              )}
+              <div className="w-[544px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center px-4">
+                {profileData.priorityArea ? <span className="text-gray-700 font-roboto">{profileData.priorityArea}</span> : null}
+              </div>
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-base font-bold font-roboto mb-2">
+                Đối tượng ưu tiên
+              </label>
+              <div className="w-[544px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center px-4">
+                {profileData.priorityObject ? <span className="text-gray-700 font-roboto">{profileData.priorityObject}</span> : null}
+              </div>
             </div>
             <div className="mb-6 bg-[#F9FAFB] p-4 rounded-lg">
               <div className="flex items-start mb-2">
@@ -356,8 +344,8 @@ const ProfilePage = () => {
               </div>
               {isEditing ? (
                 <label className="block">
-                  <span className="inline-block w-[93px] h-10 bg-[#0056B3] text-white text-[16px] font-bold font-roboto rounded-lg flex items-center justify-center hover:bg-[#004a99] transition-colors cursor-pointer">
-                    Đăng tải
+                  <span className="inline-block w-[93px] h-10 bg-[#0056B3] text-white text-[16px] font-bold font-roboto rounded-lg flex hover:bg-[#004a99] transition-colors cursor-pointer">
+                      Đăng tải
                   </span>
                   <input
                     type="file"
