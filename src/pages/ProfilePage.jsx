@@ -324,7 +324,7 @@ const ProfilePage = () => {
                 Khu vực ưu tiên
               </label>
               <div className="w-[544px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center px-4">
-                {profileData.priorityArea ? <span className="text-gray-700 font-roboto">{profileData.priorityArea}</span> : null}
+                {profileData.priorityArea && <span className="text-gray-700 font-roboto">{profileData.priorityArea}</span>}
               </div>
             </div>
             <div className="mb-6">
@@ -332,7 +332,7 @@ const ProfilePage = () => {
                 Đối tượng ưu tiên
               </label>
               <div className="w-[544px] h-12 bg-gray-100 border border-gray-300 rounded-lg flex items-center px-4">
-                {profileData.priorityObject ? <span className="text-gray-700 font-roboto">{profileData.priorityObject}</span> : null}
+                {profileData.priorityObject && <span className="text-gray-700 font-roboto">{profileData.priorityObject}</span>}
               </div>
             </div>
             <div className="mb-6 bg-[#F9FAFB] p-4 rounded-lg">
