@@ -35,6 +35,7 @@ import ExamineeDetail from './pages/Admin/ExamineeDetail';
 import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
 import AdmissionQuota from './pages/Admin/AdmissionQuota'; // Thêm import
+import TaiLieuList from './pages/Tailieuontap/Tailieulist';
 
 function ProtectedRoute({ children, isLoggedIn }) {
   const location = useLocation();
@@ -118,6 +119,7 @@ export default function App() {
                 <Route path="/lien-he" element={<Contact />} />
                 <Route path="/thi-thu" element={<MockTest />} />
                 <Route path="/bat-dau" element={<ExamSchedulePage />} />
+                <Route path="/tai-lieu" element={<TaiLieuList />} />
 
                 {/* Xét tuyển */}
                 <Route
