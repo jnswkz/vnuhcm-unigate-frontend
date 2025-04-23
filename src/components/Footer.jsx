@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+
 export default function Footer() {
   return (
     <footer className="bg-[#0056B3] text-white py-12">
@@ -7,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Cột 1: Về chúng tôi */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 pb-2 border-b border-blue-400">Về chúng tôi</h3>
+            <h3 className="text-lg font-semibold mb-6 pb-2 border-b border-blue-400">Về ĐHQG-TPHCM</h3>
             <ul className="space-y-3">
               <li><Link to="/gioi-thieu" className="hover:text-gray-200">Giới thiệu</Link></li>
               <li><Link to="/cac-truong-thanh-vien" className="hover:text-gray-200">Các trường thành viên</Link></li>
@@ -31,10 +32,8 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6 pb-2 border-b border-blue-400">Xét tuyển</h3>
             <ul className="space-y-3">
-              <li><Link to="/quy-che-xet-tuyen" className="hover:text-gray-200">Quy chế xét tuyển</Link></li>
-              <li><Link to="/chi-tieu-tuyen-sinh" className="hover:text-gray-200">Chỉ tiêu tuyển sinh</Link></li>
-              <li><Link to="/diem-chuan-tham-khao" className="hover:text-gray-200">Điểm chuẩn tham khảo</Link></li>
-              <li><Link to="/huong-dan-dang-ky" className="hover:text-gray-200">Hướng dẫn đăng ký</Link></li>
+              <li><Link to="/dang-ki-thi" className="hover:text-gray-200">Đăng kí thi</Link></li>
+              <li><Link to="/dang-ki-xet-tuyen" className="hover:text-gray-200">Đăng kí xét tuyển</Link></li>
             </ul>
           </div>
 
