@@ -17,6 +17,7 @@ import RegistrationForm from "./pages/Register";
 import Gioithieukythi from "./pages/Gioithieu/Gioithieukythi";
 import CauTrucDeThi from "./pages/Gioithieu/CauTrucDeThi";
 import LichThi from "./pages/Gioithieu/Lichthi";
+import QuyCheThi from "./pages/Gioithieu/Quychethi"; // Thêm import mới
 import ChangePasswordPage from './components/dashboard/ChangePasswordPage'; 
 import ProfilePage from './pages/ProfilePage'; 
 import Batdau from './pages/ThiDGNL/Batdau'; 
@@ -39,6 +40,8 @@ import ExamineeDetail from './pages/Admin/ExamineeDetail';
 import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
 import AdmissionQuota from './pages/Admin/AdmissionQuota';
+import TaiLieuList from './pages/Tailieuontap/Tailieulist'; // Import thành phần
+
 
 // Định nghĩa base URL của API
 const API_BASE_URL = "http://127.0.0.1:8000"; // Thay đổi thành URL của server FastAPI của bạn
@@ -167,6 +170,10 @@ function AppContent() {
                 <Route path="/thong-tin-ky-thi" element={<Navigate to="/gioi-thieu/ky-thi" replace />} />
                 <Route path="/dang-ki-xet-tuyen" element={<Navigate to="/xet-tuyen" replace />} />
                 <Route path="/dang-ki-thi" element={<Navigate to="/thi-dgnl" replace />} />
+                <Route path="/tai-lieu-on-tap" element={<TaiLieuList />} /> 
+                <Route path="/lich-thi" element={<LichThi />} />
+                <Route path="/cau-truc-de-thi" element={<CauTrucDeThi />} /> 
+                <Route path="/gioi-thieu/quy-che-thi" element={<QuyCheThi />} /> 
 
                 <Route
                   path="/xet-tuyen"
@@ -196,6 +203,7 @@ function AppContent() {
                   <Route path="ky-thi" element={<Gioithieukythi />} />
                   <Route path="cau-truc-de-thi" element={<CauTrucDeThi />} />
                   <Route path="lich-thi" element={<LichThi />} />
+                  <Route path="quy-che-thi" element={<QuyCheThi />} /> {/* Thêm route mới */}
                 </Route>
 
                 <Route
