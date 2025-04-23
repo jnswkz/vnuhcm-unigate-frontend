@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify'; // Import Toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS của Toastify
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify'; // ToastContainer sẽ được xử lý ở App.jsx
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function LoginForm() {
+export default function LoginForm({ onLogin }) {
   const [formData, setFormData] = useState({
     cccd: '',
     password: '',
@@ -12,6 +12,8 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const navigate = useNavigate(); // Để điều hướng nếu cần
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,45 +54,13 @@ export default function LoginForm() {
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length === 0) {
-      const param = new URLSearchParams({
-        cccd: formData.cccd,
-        password: formData.password,
+      // Gọi onLogin từ App.jsx để xử lý API và trạng thái
+      onLogin(formData.cccd, formData.password);
+      setFormData({
+        cccd: '',
+        password: '',
       });
-      const response = await fetch(`http://localhost:8000/api/authenticate-user?${param}`, { method: 'GET' });
-      const data = await response.json();
-      const status = data.message;
-
-      if (status === "User authenticated successfully") {
-        toast.success('Đăng nhập thành công!', {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setFormData({
-          cccd: '',
-          password: '',
-        });
-        setFormSubmitted(false);
-      } else {
-        toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin đăng nhập.', {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setFormData({
-          cccd: '',
-          password: '',
-        });
-        setFormSubmitted(false);
-      }
+      setFormSubmitted(false);
     } else {
       setErrors(validationErrors);
     }
@@ -110,7 +80,7 @@ export default function LoginForm() {
         <div className="font-bold text-lg">VNUHCM - UNIGATE</div>
         <div className="font-bold text-lg flex-grow text-center">ĐĂNG NHẬP TÀI KHOẢN</div>
         <div>
-          <Link to="/register" className="text-white hover:underline">
+          <Link to="/dang-ky" className="text-white hover:underline">
             Chưa có tài khoản? Đăng ký
           </Link>
         </div>
@@ -174,7 +144,7 @@ export default function LoginForm() {
           </form>
         </div>
       </div>
-      <ToastContainer />
+      {/* ToastContainer đã được xử lý ở App.jsx, không cần ở đây */}
     </div>
   );
 }
