@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Import các components và pages
 import HeaderDangNhap from "./components/HeaderDangNhap";
+import HeaderCND from "./components/HeaderCDN";
 import Footer from "./components/Footer";
 import Dashboard from "./components/dashboard/Dashboard";
 import NewsPage from "./components/dashboard/NewsPage";
 import NewsDetailPage from "./components/dashboard/NewsDetailPage"; 
+import HeroSection from "./pages/HeroSection"; // Giao diện dashboard chưa đăng nhập
 import LoginForm from "./pages/login";
 import RegistrationForm from "./pages/Register";
 import Gioithieukythi from "./pages/Gioithieu/Gioithieukythi";
@@ -34,7 +37,7 @@ import ForumManagement from './pages/Admin/ForumManagement';
 import ExamineeDetail from './pages/Admin/ExamineeDetail';
 import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
-import AdmissionQuota from './pages/Admin/AdmissionQuota'; // Thêm import
+import AdmissionQuota from './pages/Admin/AdmissionQuota';
 
 function ProtectedRoute({ children, isLoggedIn }) {
   const location = useLocation();
@@ -50,21 +53,28 @@ function AdminRoute({ children, isLoggedIn, user }) {
 function MainLayout({ children, isLoggedIn, user, onLogout }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderDangNhap user={user} onLogout={onLogout} />
+      {isLoggedIn ? (
+        <HeaderDangNhap user={user} onLogout={onLogout} />
+      ) : (
+        <HeaderCND />
+      )}
       {children}
       <Footer />
     </div>
   );
 }
 
-export default function App() {
+// Tạo một AppContent component bên trong để sử dụng useNavigate
+function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState({
     name: "Nguyen Van A",
     email: "nguyenvana@student.edu.vn",
     phone: "0912345678",
-    role: "admin", // Giả định người dùng là admin
+    role: "admin",
   });
+  
+  const navigate = useNavigate(); // Đặt useNavigate() ở đây, trong component
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -79,12 +89,12 @@ export default function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
-    console.log('Đăng xuất');
+    console.log('Đăng xuất thành công');
+    navigate('/'); // Bây giờ navigate hoạt động đúng
   };
 
   return (
-    <Router>
-      {/* ToastContainer ở cấp cao nhất để quản lý thông báo */}
+    <div>
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -104,7 +114,12 @@ export default function App() {
           element={
             <MainLayout isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout}>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route
+                  path="/"
+                  element={
+                    isLoggedIn ? <Dashboard /> : <HeroSection />
+                  }
+                />
                 <Route path="/news" element={<NewsPage />} />
                 <Route path="/news/:id" element={<NewsDetailPage />} />
                 <Route path="/dang-nhap" element={<LoginForm onLogin={handleLogin} />} />
@@ -177,7 +192,7 @@ export default function App() {
                   <Route path="examinees/:id" element={<ExamineeDetail />} />
                   <Route path="exams" element={<ExamResults />} />
                   <Route path="recruitment" element={<Recruitment />} />
-                  <Route path="admission-quota" element={<AdmissionQuota />} /> 
+                  <Route path="admission-quota" element={<AdmissionQuota />} />
                   <Route path="documents" element={<Documents />} />
                   <Route path="forums" element={<ForumManagement />} />
                   <Route path="messages" element={<div>Tin nhắn</div>} />
@@ -189,6 +204,15 @@ export default function App() {
           }
         />
       </Routes>
+    </div>
+  );
+}
+
+// Component App chính
+export default function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
