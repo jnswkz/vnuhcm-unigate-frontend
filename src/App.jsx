@@ -69,7 +69,7 @@ function MainLayout({ children, isLoggedIn, user, onLogout }) {
 }
 
 function AppContent() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Đặt mặc định là false để hiển thị giao diện chưa đăng nhập
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Đặt mặc định là false để hiển thị giao diện chưa đăng nhập
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
@@ -163,6 +163,10 @@ function AppContent() {
                 <Route path="/lien-he" element={<Contact />} />
                 <Route path="/thi-thu" element={<MockTest />} />
                 <Route path="/bat-dau" element={<ExamSchedulePage />} />
+                <Route path="/tin-tuc-su-kien" element={<NewsPage />} />
+                <Route path="/thong-tin-ky-thi" element={<Navigate to="/gioi-thieu/ky-thi" replace />} />
+                <Route path="/dang-ki-xet-tuyen" element={<Navigate to="/xet-tuyen" replace />} />
+                <Route path="/dang-ki-thi" element={<Navigate to="/thi-dgnl" replace />} />
 
                 <Route
                   path="/xet-tuyen"
@@ -229,6 +233,7 @@ function AppContent() {
             </AdminRoute>
           }
         />
+
       </Routes>
     </div>
   );
