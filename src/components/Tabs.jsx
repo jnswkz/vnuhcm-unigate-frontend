@@ -34,6 +34,16 @@ export default function Tabs() {
         >
           Lịch thi
         </NavLink>
+        <NavLink
+          to="/gioi-thieu/quy-che-thi"
+          className={({ isActive }) =>
+            `pb-2 text-base font-bold font-roboto ${
+              isActive ? 'text-[#0056B3] border-b-2 border-[#0056B3]' : 'text-black'
+            }`
+          }
+        >
+          Quy chế thi
+        </NavLink>
       </div>
     </div>
   );
