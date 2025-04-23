@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 
-
 export default function Footer() {
   return (
     <footer className="bg-[#0056B3] text-white py-12">
@@ -11,7 +10,16 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-6 pb-2 border-b border-blue-400">Về ĐHQG-TPHCM</h3>
             <ul className="space-y-3">
               <li><Link to="/gioi-thieu" className="hover:text-gray-200">Giới thiệu</Link></li>
-              <li><Link to="/cac-truong-thanh-vien" className="hover:text-gray-200">Các trường thành viên</Link></li>
+              <li>
+                <a
+                  href="https://vnuhcm.edu.vn/ve-dhqg-hcm/33393364/313364/373364"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gray-200"
+                >
+                  Các trường thành viên
+                </a>
+              </li>
               <li><Link to="/tin-tuc-su-kien" className="hover:text-gray-200">Tin tức & Sự kiện</Link></li>
               <li><Link to="/lien-he" className="hover:text-gray-200">Liên hệ</Link></li>
             </ul>
@@ -21,10 +29,26 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6 pb-2 border-b border-blue-400">Kì thi ĐGNL</h3>
             <ul className="space-y-3">
-              <li><Link to="/thong-tin-ky-thi" className="hover:text-gray-200">Thông tin kỳ thi</Link></li>
-              <li><Link to="/lich-thi" className="hover:text-gray-200">Lịch thi</Link></li>
-              <li><Link to="/cau-truc-de-thi" className="hover:text-gray-200">Cấu trúc đề thi</Link></li>
-              <li><Link to="/quy-che-thi" className="hover:text-gray-200">Quy chế thi</Link></li>
+              <li>
+                <Link to="/thong-tin-ky-thi" className="hover:text-gray-200">
+                  Thông tin kỳ thi
+                </Link>
+              </li>
+              <li>
+                <Link to="/lich-thi" className="hover:text-gray-200">
+                  Lịch thi
+                </Link>
+              </li>
+              <li>
+                <Link to="/cau-truc-de-thi" className="hover:text-gray-200">
+                  Cấu trúc đề thi
+                </Link>
+              </li>
+              <li>
+                <Link to="/gioi-thieu/quy-che-thi" className="hover:text-gray-200">
+                  Quy chế thi
+                </Link>
+              </li>
             </ul>
           </div>
 
