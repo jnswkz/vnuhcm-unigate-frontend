@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 // Import các components và pages
 import HeaderDangNhap from "./components/HeaderDangNhap";
@@ -10,7 +11,7 @@ import Footer from "./components/Footer";
 import Dashboard from "./components/dashboard/Dashboard";
 import NewsPage from "./components/dashboard/NewsPage";
 import NewsDetailPage from "./components/dashboard/NewsDetailPage"; 
-import HeroSection from "./pages/HeroSection"; // Giao diện dashboard chưa đăng nhập
+import HeroSection from "./pages/HeroSection";
 import LoginForm from "./pages/login";
 import RegistrationForm from "./pages/Register";
 import Gioithieukythi from "./pages/Gioithieu/Gioithieukythi";
@@ -38,7 +39,9 @@ import ExamineeDetail from './pages/Admin/ExamineeDetail';
 import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
 import AdmissionQuota from './pages/Admin/AdmissionQuota';
-import TaiLieuList from './pages/Tailieuontap/Tailieulist';
+
+// Định nghĩa base URL của API
+const API_BASE_URL = "http://127.0.0.1:8000"; // Thay đổi thành URL của server FastAPI của bạn
 
 function ProtectedRoute({ children, isLoggedIn }) {
   const location = useLocation();
@@ -65,33 +68,60 @@ function MainLayout({ children, isLoggedIn, user, onLogout }) {
   );
 }
 
-// Tạo một AppContent component bên trong để sử dụng useNavigate
 function AppContent() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [user, setUser] = useState({
-    name: "Nguyen Van A",
-    email: "nguyenvana@student.edu.vn",
-    phone: "0912345678",
-    role: "admin",
-  });
-  
-  const navigate = useNavigate(); // Đặt useNavigate() ở đây, trong component
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Đặt mặc định là false để hiển thị giao diện chưa đăng nhập
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setUser({
-      name: "Nguyen Van A",
-      email: "nguyenvana@student.edu.vn",
-      phone: "0912345678",
-      role: "admin",
-    });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Lưu trạng thái vào localStorage
+    localStorage.setItem('isLoggedIn', isLoggedIn);
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
+  }, [isLoggedIn, user, token]);
+
+  const handleLogin = async (cccd, password) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/authenticate-user`, {
+        params: {
+          cccd: cccd,
+          password: password,
+        },
+      });
+
+      if (response.data.message === "User authenticated successfully") {
+        const userData = {
+          cccd: response.data.user,
+          role: "user", // Giả định role, bạn có thể lấy từ API nếu có
+          name: response.data.user, // Tạm thời dùng CCCD làm name
+          email: "",
+          phone: "",
+        };
+        setIsLoggedIn(true);
+        setUser(userData);
+        setToken(response.data.token);
+        toast.success("Đăng nhập thành công!");
+        navigate('/'); // Điều hướng về trang chủ sau khi đăng nhập thành công
+      } else {
+        toast.error("Sai CCCD hoặc mật khẩu!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API đăng nhập:", error);
+      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại!");
+    }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
+    setToken(null);
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     console.log('Đăng xuất thành công');
-    navigate('/'); // Bây giờ navigate hoạt động đúng
+    navigate('/');
   };
 
   return (
@@ -109,7 +139,6 @@ function AppContent() {
       />
 
       <Routes>
-        {/* Các route công khai */}
         <Route
           path="/*"
           element={
@@ -134,9 +163,7 @@ function AppContent() {
                 <Route path="/lien-he" element={<Contact />} />
                 <Route path="/thi-thu" element={<MockTest />} />
                 <Route path="/bat-dau" element={<ExamSchedulePage />} />
-                <Route path="/tai-lieu" element={<TaiLieuList />} />
 
-                {/* Xét tuyển */}
                 <Route
                   path="/xet-tuyen"
                   element={
@@ -151,7 +178,6 @@ function AppContent() {
                   <Route path="ket-qua" element={<KetQuaXT />} />
                 </Route>
 
-                {/* Giới thiệu */}
                 <Route
                   path="/gioi-thieu"
                   element={
@@ -168,7 +194,6 @@ function AppContent() {
                   <Route path="lich-thi" element={<LichThi />} />
                 </Route>
 
-                {/* Dashboard */}
                 <Route
                   path="/dashboard/*"
                   element={
@@ -182,7 +207,6 @@ function AppContent() {
           }
         />
 
-        {/* Các route Admin */}
         <Route
           path="/admin/*"
           element={
@@ -210,7 +234,6 @@ function AppContent() {
   );
 }
 
-// Component App chính
 export default function App() {
   return (
     <Router>
