@@ -87,7 +87,7 @@ export default function Header({ user, onLogout }) {
           </li>
           <li>
             <NavLink
-              to="/tai-lieu"
+              to="/tai-lieu-on-tap" // Cập nhật đường dẫn
               className={({ isActive }) =>
                 `px-4 py-2 rounded text-gray-700 font-medium transition-colors font-roboto ${
                   isActive ? 'bg-[#0056B3] text-white' : 'hover:bg-[#0056B3] hover:text-white'
