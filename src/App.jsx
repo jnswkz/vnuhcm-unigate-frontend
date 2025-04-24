@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import api from "./axios"; // Import axios instance
 
 // Import các components và pages
 import HeaderDangNhap from "./components/HeaderDangNhap";
@@ -41,10 +41,9 @@ import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
 import AdmissionQuota from './pages/Admin/AdmissionQuota';
 import TaiLieuList from './pages/Tailieuontap/Tailieulist'; 
-
+// import jwt from 'jwt-decode'
 
 // Định nghĩa base URL của API
-const API_BASE_URL = "http://127.0.0.1:8000"; // Thay đổi thành URL của server FastAPI của bạn
 
 function ProtectedRoute({ children, isLoggedIn }) {
   const location = useLocation();
@@ -79,53 +78,58 @@ function AppContent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Lưu trạng thái vào localStorage
-    localStorage.setItem('isLoggedIn', isLoggedIn);
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('token', token);
-  }, [isLoggedIn, user, token]);
+    const checkAuth = async () => {
+      try {
+        const res = await api.get("/api/me");   
+        // alert(1);
+        setIsLoggedIn(true);
+        setUser(res.data);                      
+      } catch {
+        setIsLoggedIn(false);
+        setUser(null);
+        // alert(document.cookie);
+      }
+    };
+    checkAuth();
+  }, []);
 
   const handleLogin = async (cccd, password) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/authenticate-user`, {
-        params: {
-          cccd: cccd,
-          password: password,
-        },
+      const formData = new URLSearchParams();
+      formData.append("username", cccd);
+      formData.append("password", password);
+  
+      const req = await api.post("/api/login", formData, {
+        withCredentials: true, 
       });
+      // console.log(req);
+      const res = await req.data;
+      console.log(res);
+      const { access_token } = res;
+      
+      document.cookie = `access_token=${access_token}; path=/; max-age=3600`; // Set cookie with 1 hour expiration
 
-      if (response.data.message === "User authenticated successfully") {
-        const userData = {
-          cccd: response.data.user,
-          role: "user", // Giả định role, bạn có thể lấy từ API nếu có
-          name: response.data.user, // Tạm thời dùng CCCD làm name
-          email: "",
-          phone: "",
-        };
-        setIsLoggedIn(true);
-        setUser(userData);
-        setToken(response.data.token);
-        toast.success("Đăng nhập thành công!");
-        navigate('/'); // Điều hướng về trang chủ sau khi đăng nhập thành công
-      } else {
-        toast.error("Sai CCCD hoặc mật khẩu!");
-      }
-    } catch (error) {
-      console.error("Lỗi khi gọi API đăng nhập:", error);
-      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại!");
+  
+      setIsLoggedIn(true);
+      setUser({ username: cccd });
+      toast.success("Đăng nhập thành công!");
+      navigate("/");
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Sai thông tin đăng nhập!");
+    }
+  };
+  
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/api/logout");   
+    } finally {
+      setIsLoggedIn(false);
+      setUser(null);
+      navigate("/");
     }
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    console.log('Đăng xuất thành công');
-    navigate('/');
-  };
 
   return (
     <div>
