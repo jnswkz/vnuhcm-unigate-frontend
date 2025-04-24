@@ -17,7 +17,7 @@ import RegistrationForm from "./pages/Register";
 import Gioithieukythi from "./pages/Gioithieu/Gioithieukythi";
 import CauTrucDeThi from "./pages/Gioithieu/CauTrucDeThi";
 import LichThi from "./pages/Gioithieu/Lichthi";
-import QuyCheThi from "./pages/Gioithieu/Quychethi"; // Thêm import mới
+import QuyCheThi from "./pages/Gioithieu/QuyCheThi"; 
 import ChangePasswordPage from './components/dashboard/ChangePasswordPage'; 
 import ProfilePage from './pages/ProfilePage'; 
 import Batdau from './pages/ThiDGNL/Batdau'; 
@@ -40,7 +40,7 @@ import ExamineeDetail from './pages/Admin/ExamineeDetail';
 import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
 import AdmissionQuota from './pages/Admin/AdmissionQuota';
-import TaiLieuList from './pages/Tailieuontap/Tailieulist'; // Import thành phần
+import TaiLieuList from './pages/Tailieuontap/Tailieulist'; 
 
 
 // Định nghĩa base URL của API
