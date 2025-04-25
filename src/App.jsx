@@ -95,20 +95,15 @@ function AppContent() {
 
   const handleLogin = async (cccd, password) => {
     try {
-      const formData = new URLSearchParams();
-      formData.append("username", cccd);
-      formData.append("password", password);
-  
-      const req = await api.post("/api/login", formData, {
-        withCredentials: true, 
+      const res = await api.post("/api/login", {
+        username: cccd,
+        password: password
+      }, {
+        withCredentials: true
       });
-      // console.log(req);
-      const res = await req.data;
-      console.log(res);
-      const { access_token } = res;
-      
-      document.cookie = `access_token=${access_token}; path=/; max-age=3600`; // Set cookie with 1 hour expiration
-
+  
+      const { access_token } = res.data;
+      document.cookie = `access_token=${access_token}; path=/; max-age=3600`;
   
       setIsLoggedIn(true);
       setUser({ username: cccd });
@@ -118,7 +113,6 @@ function AppContent() {
       toast.error(err.response?.data?.detail || "Sai thông tin đăng nhập!");
     }
   };
-  
 
   const handleLogout = async () => {
     try {
