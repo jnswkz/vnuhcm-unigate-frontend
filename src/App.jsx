@@ -135,13 +135,10 @@ function AppContent() {
   };
 
   const handleLogout = async () => {
-    try {
-      await api.post("/api/logout");   
-    } finally {
-      setIsLoggedIn(false);
-      setUser(null);
-      navigate("/");
-    }
+    document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    setIsLoggedIn(false);
+    setUser(null);
+    navigate("/");
   };
 
 
