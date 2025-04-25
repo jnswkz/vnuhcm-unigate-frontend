@@ -1,19 +1,19 @@
 // TaiLieuList.jsx – chỉnh màu tag (background trắng, chữ đen; khi chọn: xanh + trắng)
 import React, { useEffect, useState } from 'react';
 import { FileText, Download} from 'lucide-react';
+import api from '../../axios'
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
-
-const TaiLieuList = () => {
+const TaiLieuList = ({ handleDownload }) => {
   const [documents, setDocuments] = useState([]);
   const [filterTag, setFilterTag] = useState('Tất cả');
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/get-documents-list`)
-      .then((res) => res.json())
-      .then(setDocuments)
-      .catch(console.error);
+    api.get("/api/get-documents-list")
+    .then((res) => {
+      setDocuments(res.data);
+    })
+    .catch(console.error);
   }, []);
 
   const tagSet = new Set(['Tất cả']);
@@ -97,13 +97,15 @@ const TaiLieuList = () => {
                   <td className="p-3 hidden md:table-cell">{doc.downloads ?? '--'}</td>
                   <td className="p-3 hidden md:table-cell">{doc.size ?? '--'}</td>
                   <td className="p-3 text-center">
-                    <a
-                      href={`${API_BASE}/api/get-document?id=${doc.id}`}
-                      className="inline-flex items-center gap-2 bg-[#0056B3] hover:bg-[#004494] text-white px-4 py-1.5 rounded md:text-sm text-xs"
-                    >
-                      <Download size={16} />
-                      Tải xuống
-                    </a>
+                  <button
+                    type="button"
+                    onClick={() => handleDownload(doc)}
+                    className="inline-flex items-center gap-2 bg-[#0056B3] hover:bg-[#004494] text-white px-4 py-1.5 rounded md:text-sm text-xs"
+                  >
+                    <Download size={16} />
+                    Tải xuống
+                  </button>
+
                   </td>
                 </tr>
               ))}

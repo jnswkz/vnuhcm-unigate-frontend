@@ -93,6 +93,26 @@ function AppContent() {
     checkAuth();
   }, []);
 
+  const handleDownload = async (doc) => {
+    try {
+      const response = await api.post(
+        "/api/get-document",
+        { id: doc.id },
+        { responseType: "blob" }
+      );
+  
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", doc.filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Tải file thất bại:", error);
+    }
+  };
+
   const handleLogin = async (cccd, password) => {
     try {
       const res = await api.post("/api/login", {
@@ -168,7 +188,7 @@ function AppContent() {
                 <Route path="/thong-tin-ky-thi" element={<Navigate to="/gioi-thieu/ky-thi" replace />} />
                 <Route path="/dang-ki-xet-tuyen" element={<Navigate to="/xet-tuyen" replace />} />
                 <Route path="/dang-ki-thi" element={<Navigate to="/thi-dgnl" replace />} />
-                <Route path="/tai-lieu-on-tap" element={<TaiLieuList />} /> 
+                <Route path="/tai-lieu-on-tap" element={<TaiLieuList handleDownload={handleDownload} />} />
                 <Route path="/lich-thi" element={<LichThi />} />
                 <Route path="/cau-truc-de-thi" element={<CauTrucDeThi />} /> 
                 <Route path="/gioi-thieu/quy-che-thi" element={<QuyCheThi />} /> 
