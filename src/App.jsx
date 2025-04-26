@@ -207,7 +207,7 @@ function AppContent() {
                 <Route path="/gioi-thieu/quy-che-thi" element={<QuyCheThi />} /> 
                 <Route path="/thu-vien-so" element={<Navigate to= "/tai-lieu-on-tap" replace />} /> 
                 <Route path="/bai-thi-thu" element={<Navigate to="/" replace/>} /> 
-                <Route path="/dang-ky-du-thi" element={<Navigate to="/thi-dgnl" replace />} />
+                <Route path="/dang-ky-du-thi" element={<Navigate to="/dang-ky" replace />} />
                 <Route path="/tim-hieu-them" element={<Navigate to="/gioi-thieu/ky-thi" replace />} />
 
 
