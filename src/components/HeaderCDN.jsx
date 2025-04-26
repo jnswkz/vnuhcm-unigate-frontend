@@ -1,13 +1,14 @@
 import { Link, NavLink } from 'react-router-dom';
+import logo from '../assets/logo-dhqg.png';
 
 export default function Header() {
   return (
     <header className="flex justify-between items-center px-6 py-3 bg-white shadow-md">
-      {/* Logo */}
-      <div className="flex items-center">
-        <div className="w-[45px] h-[45px] bg-gray-300 mr-4"></div>
+ {/* Logo */}
+        <div className="flex items-center">
+        <img src={logo} alt="Logo" className="w-[45px] h-[45px] mr-4 object-contain" />
         <div className="text-[#0056B3] text-xl font-bold">VNUHCM-UNIGATE</div>
-      </div>
+    </div>
 
       {/* Navigation Menu */}
       <nav>

@@ -47,6 +47,7 @@ import PostDetailPage from './pages/Forum/Post.jsx';
 import PostPage from './pages/Forum/postPage.jsx';
 import PostDetail  from './pages/Forum/PostDetails.jsx';
 import ReplyBox from './pages/Forum/Reply.jsx';
+import Chatbot from './components/dashboard/Chatbot';
 // import jwt from 'jwt-decode'
 
 // Định nghĩa base URL của API
@@ -210,6 +211,11 @@ function AppContent() {
                 <Route path="/lich-thi" element={<LichThi />} />
                 <Route path="/cau-truc-de-thi" element={<CauTrucDeThi />} /> 
                 <Route path="/gioi-thieu/quy-che-thi" element={<QuyCheThi />} /> 
+                <Route path="/thu-vien-so" element={<Navigate to= "/tai-lieu-on-tap" replace />} /> 
+                <Route path="/bai-thi-thu" element={<Navigate to="/" replace/>} /> 
+                <Route path="/dang-ky-du-thi" element={<Navigate to="/dang-ky" replace />} />
+                <Route path="/tim-hieu-them" element={<Navigate to="/gioi-thieu/ky-thi" replace />} />
+
 
                 <Route
                   path="/xet-tuyen"
@@ -228,7 +234,7 @@ function AppContent() {
                 <Route
                   path="/gioi-thieu"
                   element={
-                    <ProtectedRoute isLoggedIn={isLoggedIn}>
+                    <ProtectedRoute isLoggedIn={true}>
                       <div className="flex flex-col">
                         <Outlet />
                       </div>
