@@ -41,6 +41,12 @@ import Documents from './pages/Admin/Documents';
 import Recruitment from './pages/Admin/Recruitment';
 import AdmissionQuota from './pages/Admin/AdmissionQuota';
 import TaiLieuList from './pages/Tailieuontap/Tailieulist'; 
+import Forum from './pages/Forum/Forum.jsx'
+import CreatePostForm from './pages/Forum/CreatePost.jsx';
+import PostDetailPage from './pages/Forum/Post.jsx';
+import PostPage from './pages/Forum/postPage.jsx';
+import PostDetail  from './pages/Forum/PostDetails.jsx';
+import ReplyBox from './pages/Forum/Reply.jsx';
 // import jwt from 'jwt-decode'
 
 // Định nghĩa base URL của API
@@ -235,6 +241,24 @@ function AppContent() {
                   <Route path="lich-thi" element={<LichThi />} />
                   <Route path="quy-che-thi" element={<QuyCheThi />} /> {/* Thêm route mới */}
                 </Route>
+
+                <Route
+                
+                  path="/dien-dan"
+                  element={
+                    <ProtectedRoute isLoggedIn={isLoggedIn}>
+                      <Forum />
+                    </ProtectedRoute>
+                  }>
+                    <Route path="create-post" element={<CreatePostForm />} />
+                    <Route path="posts_page">
+                      <Route path=":title" element={<PostPage />} />
+                    </Route>
+                    <Route path="post">
+                      <Route path=":id" element={<PostDetail />} />
+                    </Route>
+
+                  </Route>
 
                 <Route
                   path="/dashboard/*"
