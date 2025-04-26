@@ -76,7 +76,7 @@ export default function AdmissionInfo() {
               <p className="text-red-600 font-medium">{admissionData.paymentStatus}</p>
               <button
                 onClick={handlePayment}
-                className="bg-[#0056B3] text-white py-2 px-4 rounded font-medium hover:bg-[#004494] transition-colors"
+                className="bg-[#0056B3] text-white py-2 px-4 rounded font-medium hover:bg-[#004494] transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 Thanh toán
               </button>
