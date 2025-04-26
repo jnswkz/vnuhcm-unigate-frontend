@@ -1,14 +1,47 @@
+import { useState, useEffect } from 'react';
 import ProfileCard from './ProfileCard';
 import ActionCard from './ActionCard';
 import NewsCard from './NewsCard';
 import Chatbot from './Chatbot';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const user = {
-    name: "Nguyen Van A",
-    email: "nguyenvana@student.edu.vn",
-    phone: "0912345678",
+    name: "Võ Phương Thanh",
+    email: "vophuongthanh604@outlook.com",
+    phone: "0885583693",
+  };
+
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [showChatbot, setShowChatbot] = useState(false);
+
+  // Cập nhật thời gian mỗi giây
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());nn
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const calculateCountdown = (targetDate) => {
+    const now = currentTime; // Sử dụng thời gian thực
+    const target = new Date(targetDate);
+    const diff = target - now;
+    if (diff <= 0) return "Đã kết thúc";
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    return `Còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+  };
+
+  // Hàm kiểm tra xem thời gian có gần đến ngày đăng ký không (dưới 7 ngày)
+  const isRegistrationNear = (targetDate) => {
+    const now = currentTime; 
+    const target = new Date(targetDate);
+    const diff = target - now;
+    const days = diff / (1000 * 60 * 60 * 24);
+    return days > 0 && days < 7; 
   };
 
   const actionCards = [
@@ -24,7 +57,7 @@ export default function Dashboard() {
       buttonText: "Làm bài thi thử",
       buttonColor: "#FF9017",
       borderColor: "#FFB459",
-      link: "/thi-thu", // Đường dẫn đến trang làm bài thi thử
+      link: "/thi-thu",
     },
     {
       icon: (
@@ -40,6 +73,7 @@ export default function Dashboard() {
       buttonText: "Xem kết quả",
       buttonColor: "#0056B3",
       borderColor: "#0056B3",
+      link: "/thi-dgnl", 
     },
     {
       icon: (
@@ -50,11 +84,12 @@ export default function Dashboard() {
       ),
       title: "Kỳ thi ĐGNL đợt 2",
       description: "Ngày thi: 01/06/2025",
-      status: "Còn lại: 47 ngày 13 giờ",
+      status: calculateCountdown("2025-06-01"),
       statusColor: "#EBF5FF",
       buttonText: "Đăng ký dự thi",
       buttonColor: "#0056B3",
       borderColor: "#0056B3",
+      link: "/thi-dgnl", 
     },
     {
       icon: (
@@ -67,6 +102,7 @@ export default function Dashboard() {
       buttonText: "Bắt đầu trò chuyện",
       buttonColor: "#9333EA",
       borderColor: "#9333EA",
+      onClick: () => setShowChatbot(true),
     },
     {
       icon: (
@@ -77,13 +113,14 @@ export default function Dashboard() {
       ),
       title: "Đăng ký xét tuyển",
       description: "Thời gian: 15/06 - 30/06/2025",
-      status: "Còn lại: 61 ngày 13 giờ",
+      status: calculateCountdown("2025-06-15"),
       statusColor: "#F3F4F6",
-      buttonText: "Chưa đến thời gian đăng ký",
-      buttonColor: "#E5E7EB",
-      buttonTextColor: "#9CA3AF",
-      borderColor: "#E5E7EB",
-      disabled: true,
+      buttonText: isRegistrationNear("2025-06-15") ? "Đăng ký ngay" : "Chưa đến thời gian đăng ký",
+      buttonColor: isRegistrationNear("2025-06-15") ? "#0056B3" : "#E5E7EB",
+      buttonTextColor: isRegistrationNear("2025-06-15") ? "#FFFFFF" : "#9CA3AF",
+      borderColor: isRegistrationNear("2025-06-15") ? "#0056B3" : "#E5E7EB",
+      disabled: !isRegistrationNear("2025-06-15"),
+      link: isRegistrationNear("2025-06-15") ? "/dang-ky-xet-tuyen" : undefined,
     },
   ];
 
@@ -108,14 +145,14 @@ export default function Dashboard() {
       date: "05/03/2024",
       title: "Thông tin ngành đào tạo mới",
       description: "Giới thiệu các ngành đào tạo mới được mở trong năm học 2024-2025 cùng cơ hội việc làm sau khi tốt nghiệp.",
-    },
+    }
   ];
 
   return (
     <div className="w-full min-h-screen bg-white">
       {/* Welcome Section */}
       <div className="w-full h-[198px] bg-[#EBF5FF] relative">
-        <div className="max-w-[1272px] mx-auto pt-10">
+        <div className="max-w-[1272px] mx-auto pt-10 animate-slide-right">
           <h1 className="text-[32px] font-bold text-[#0056B3] font-roboto leading-[48px]">
             Xin chào, {user.name}!
           </h1>
@@ -128,37 +165,55 @@ export default function Dashboard() {
       {/* Action Cards - Row 1 */}
       <div className="max-w-[1272px] mx-auto mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         {actionCards.slice(0, 3).map((card, index) => (
-          <ActionCard key={index} {...card} />
+          <div
+            key={index}
+            className="animate-slide-up"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <ActionCard {...card} />
+          </div>
         ))}
       </div>
 
       {/* Action Cards - Row 2 */}
       <div className="max-w-[1272px] mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         {actionCards.slice(3, 5).map((card, index) => (
-          <ActionCard key={index} {...card} />
+          <div
+            key={index}
+            className="animate-slide-up"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <ActionCard {...card} />
+          </div>
         ))}
       </div>
 
       {/* News Section */}
       <div className="max-w-[1272px] mx-auto mt-12">
-        <h2 className="text-[32px] font-bold text-[#0056B3] font-roboto leading-[48px]">
+        <h2 className="text-[32px] font-bold text-[#0056B3] font-roboto leading-[48px] animate-fade-in">
           Tin tức mới nhất
         </h2>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {newsItems.map((news) => (
-            <NewsCard key={news.id} {...news} />
+          {newsItems.map((news, index) => (
+            <div
+              key={news.id}
+              className="animate-slide-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <NewsCard {...news} />
+            </div>
           ))}
         </div>
         <div className="mt-8 flex justify-center">
           <Link
-            to="/news" // Điều hướng đến trang NewsPage
-            className="w-[190px] h-[52px] bg-[#0056B3] text-white text-[16px] font-roboto font-bold rounded-md hover:bg-[#004a99] flex items-center justify-center mx-4"
+            to="/news"
+            className="w-[190px] h-[52px] bg-[#0056B3] text-white text-[16px] font-roboto font-bold rounded-md hover:bg-[#004a99] flex items-center justify-center mx-4 transform transition-all duration-200 hover:scale-105 active:scale-95"
           >
             Xem tất cả tin tức
           </Link>
         </div>
       </div>
-      <Chatbot />
+      {showChatbot && <Chatbot onClose={() => setShowChatbot(false)} />}
     </div>
   );
 }
