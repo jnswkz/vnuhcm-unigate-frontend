@@ -64,10 +64,10 @@ const NewsPage = () => {
     <div className={`w-full min-h-screen bg-white font-sans transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Header Banner with Gradient */}
       <div className="pt-10 px-5">
-        <div className="w-full h-52 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg">
-          <h1 className="text-blue-700 text-4xl font-bold pt-8 pl-5 transition-transform duration-500 transform translate-y-0">
+        <div className="w-full h-52 bg-gradient-to-r from-[#e6f0ff] to-[#b3d4ff] rounded-lg shadow-md transition-all duration-300 hover:shadow-lg">
+          <h1 className="text-[#0056B3] text-4xl font-bold pt-8 pl-5 transition-transform duration-500 transform translate-y-0">
             Tin tức
-            <div className="w-20 h-1 bg-blue-500 mt-2 rounded-full"></div>
+            <div className="w-20 h-1 bg-[#0056B3] mt-2 rounded-full"></div>
           </h1>
           
           {/* Search Bar with Icon */}
@@ -78,7 +78,7 @@ const NewsPage = () => {
                 placeholder="Tìm kiếm tin tức..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full max-w-6xl h-12 border border-gray-200 rounded-md pl-12 pr-5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                className="w-full max-w-6xl h-12 border border-gray-200 rounded-md pl-12 pr-5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#0056B3] focus:border-transparent transition-all duration-300"
               />
               <Search className="absolute left-4 top-3 text-gray-400" size={20} />
             </div>
@@ -93,8 +93,8 @@ const NewsPage = () => {
               onClick={() => setFilter(category)}
               className={`px-6 py-3 rounded-md font-bold transition-all duration-300 transform hover:scale-105 ${
                 filter === category
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                  ? 'bg-[#0056B3] text-white shadow-md'
+                  : 'bg-[#e6f0ff] text-[#0056B3] hover:bg-[#b3d4ff]'
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -127,13 +127,13 @@ const NewsPage = () => {
                 </div>
                 <div className="p-5">
                   <div className="flex justify-between items-center">
-                    <span className="text-blue-600 text-sm font-medium px-3 py-1 bg-blue-50 rounded-full">
+                    <span className="text-[#0056B3] text-sm font-medium px-3 py-1 bg-[#e6f0ff] rounded-full">
                       {news.category}
                     </span>
                     <p className="text-gray-500 text-sm">{news.date}</p>
                   </div>
                   
-                  <h2 className="text-blue-700 text-xl font-bold mt-3 line-clamp-2 hover:text-blue-800 transition-colors duration-300">
+                  <h2 className="text-[#0056B3] text-xl font-bold mt-3 line-clamp-2 hover:text-[#003f8a] transition-colors duration-300">
                     {news.title}
                   </h2>
                   
@@ -141,7 +141,7 @@ const NewsPage = () => {
                   
                   <Link
                     to={`/news/${news.id}`} 
-                    className="mt-5 group flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors duration-300"
+                    className="mt-5 group flex items-center text-[#0056B3] font-medium hover:text-[#003f8a] transition-colors duration-300"
                   >
                     Xem chi tiết
                     <ChevronRight size={18} className="ml-1 transform transition-transform duration-300 group-hover:translate-x-1" />
