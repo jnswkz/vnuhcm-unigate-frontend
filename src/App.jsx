@@ -126,13 +126,28 @@ function AppContent() {
       document.cookie = `access_token=${access_token}; path=/; max-age=3600`;
   
       setIsLoggedIn(true);
-      setUser({ username: cccd });
-      toast.success("Đăng nhập thành công!");
-      navigate("/");
+  
+      const userRes = await api.get("/api/me", {
+        headers: {
+          Authorization: `Bearer ${access_token}`
+        }
+      });
+      const userData = userRes.data;
+      setUser(userData);
+  
+      if (userData.role === 'admin') {
+        toast.success("Đăng nhập thành công với quyền admin!");
+        navigate("/admin");
+      } else {
+        toast.success("Đăng nhập thành công!");
+        navigate("/");
+      }
+  
     } catch (err) {
       toast.error(err.response?.data?.detail || "Sai thông tin đăng nhập!");
     }
   };
+  
 
   const handleLogout = async () => {
     document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";

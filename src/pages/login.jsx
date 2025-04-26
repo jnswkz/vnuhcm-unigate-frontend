@@ -35,9 +35,10 @@ export default function LoginForm({ onLogin }) {
 
     if (!formData.cccd) {
       newErrors.cccd = "Vui lòng nhập số CCCD";
-    } else if (!/^\d{12}$/.test(formData.cccd)) {
-      newErrors.cccd = "Số CCCD phải gồm 12 chữ số và không chứa chữ cái";
-    }
+    } 
+    // else if (!/^\d{12}$/.test(formData.cccd)) {
+    //   newErrors.cccd = "Số CCCD phải gồm 12 chữ số và không chứa chữ cái";
+    // }
 
     if (!formData.password) {
       newErrors.password = "Vui lòng nhập mật khẩu";
