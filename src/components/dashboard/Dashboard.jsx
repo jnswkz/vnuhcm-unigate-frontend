@@ -90,21 +90,21 @@ export default function Dashboard() {
   const newsItems = [
     {
       id: '1',
-      image: "https://placehold.co/380x200",
+      image: "/src/assets/thongbao.png",
       date: "15/03/2024",
       title: "Thông báo tuyển sinh năm học 2024-2025",
       description: "Đại học Quốc gia TP.HCM thông báo kế hoạch tuyển sinh đại học chính quy năm 2024 với nhiều phương thức xét tuyển mới.",
     },
     {
       id: '2',
-      image: "https://placehold.co/380x200",
+      image: "/src/assets/dgnl2.jpg",
       date: "10/03/2024",
       title: "Hướng dẫn đăng ký dự thi ĐGNL",
       description: "Chi tiết các bước đăng ký dự thi đánh giá năng lực, những lưu ý quan trọng và thời gian biểu cụ thể.",
     },
     {
       id: '3',
-      image: "https://placehold.co/380x200",
+      image: "/src/assets/thongtin.jpg",
       date: "05/03/2024",
       title: "Thông tin ngành đào tạo mới",
       description: "Giới thiệu các ngành đào tạo mới được mở trong năm học 2024-2025 cùng cơ hội việc làm sau khi tốt nghiệp.",
