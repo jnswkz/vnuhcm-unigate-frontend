@@ -40,7 +40,7 @@ const SortableRow = ({ wish, handleEdit, handleDelete, isExpired }) => {
       <td className="py-5 px-4 flex space-x-2">
         <button
           onClick={() => handleEdit(wish)}
-          className="text-blue-600 hover:text-blue-800"
+          className="text-blue-600 hover:text-blue-800 transition-all duration-300 hover:scale-105 hover:shadow-lg"
           title="Sửa"
           disabled={isExpired}
         >
@@ -61,7 +61,7 @@ const SortableRow = ({ wish, handleEdit, handleDelete, isExpired }) => {
         </button>
         <button
           onClick={() => handleDelete(wish.id)}
-          className="text-red-600 hover:text-red-800"
+          className="text-red-600 hover:text-red-800 transition-all duration-300 hover:scale-105 hover:shadow-lg"
           title="Xóa"
           disabled={isExpired}
         >
@@ -266,7 +266,7 @@ export default function AdmissionWishes() {
               Đã hết thời gian điều chỉnh nguyện vọng.
             </p>
             <p className="text-red-600">
-              Thời gian điều chỉnh nguyện vọng đã kết thúc vào 17:00 ngày 15/07/2024
+              thời gian điều chỉnh nguyện vọng đã kết thúc vào 17:00 ngày 15/07/2024
             </p>
           </div>
         </div>
@@ -279,7 +279,7 @@ export default function AdmissionWishes() {
         {!isExpired && (
           <button
             onClick={handleAddWish}
-            className="bg-[#0056B3] text-white py-2 px-4 rounded font-medium hover:bg-[#004494] transition-colors flex items-center"
+            className="bg-[#0056B3] text-white py-2 px-4 rounded font-medium hover:bg-[#004494] transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center"
           >
             <span className="mr-2">+</span> Thêm nguyện vọng
           </button>
@@ -463,13 +463,13 @@ export default function AdmissionWishes() {
             <div className="flex justify-end space-x-2 mt-4">
               <button
                 onClick={handleCloseModal}
-                className="py-2 px-4 bg-white border border-gray-300 text-gray-800 rounded font-medium hover:bg-gray-100 transition-colors"
+                className="py-2 px-4 bg-white border border-gray-300 text-gray-800 rounded font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 Hủy
               </button>
               <button
                 onClick={handleSaveWish}
-                className="py-2 px-4 bg-[#0056B3] text-white rounded font-medium hover:bg-[#004494] transition-colors"
+                className="py-2 px-4 bg-[#0056B3] text-white rounded font-medium hover:bg-[#004494] transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 Lưu
               </button>
@@ -497,13 +497,13 @@ export default function AdmissionWishes() {
             <div className="flex justify-end space-x-2">
               <button
                 onClick={handleCloseDeleteModal}
-                className="py-2 px-4 bg-white border border-gray-300 text-gray-800 rounded font-medium hover:bg-gray-100 transition-colors"
+                className="py-2 px-4 bg-white border border-gray-300 text-gray-800 rounded font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 Hủy
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="py-2 px-4 bg-red-600 text-white rounded font-medium hover:bg-red-700 transition-colors"
+                className="py-2 px-4 bg-red-600 text-white rounded font-medium hover:bg-red-700 transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 Xóa
               </button>
