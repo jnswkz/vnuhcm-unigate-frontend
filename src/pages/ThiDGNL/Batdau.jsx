@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parse, isAfter, isBefore } from 'date-fns';
+import CountUp from 'react-countup';
 
 const getLocationName = (locationValue) => {
   if (!locationValue) return '';
@@ -16,7 +17,7 @@ const getLocationName = (locationValue) => {
   }
 };
 
-// CSS cho hiệu ứng đổi màu
+// CSS cho hiệu ứng đổi màu và thêm animation scale-in
 const styles = `
   @keyframes colorChange {
     0% { background: #EF4444; } /* Đỏ */
@@ -29,6 +30,15 @@ const styles = `
 
   .score-bar {
     animation: colorChange 1s ease-out forwards;
+  }
+
+  @keyframes scaleIn {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
   }
 `;
 
@@ -67,7 +77,7 @@ const ExamSchedulePage = () => {
     },
   ];
 
-  const currentDate = new Date('2025-04-17');
+  const currentDate = new Date(); 
 
   useEffect(() => {
     try {
@@ -265,7 +275,7 @@ const ExamSchedulePage = () => {
             return registeredExam && registeredExam.isPaid && hasResult && isAfterExam;
           }) ? (
             <>
-              <div className="w-full bg-[#F0FDF4] border-l-4 border-[#059669] p-4 mb-6">
+              <div className="w-full bg-[#F0FDF4] border-l-4 border-[#059669] p-4 mb-6 animate-slide-right">
                 <div className="flex items-center">
                   <svg className="w-6 h-6 text-[#059669] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
@@ -282,8 +292,12 @@ const ExamSchedulePage = () => {
                   const registeredExam = registeredExams.find((re) => re.examId === exam.id.toString());
                   return registeredExam && registeredExam.isPaid && hasResult && isAfterExam;
                 })
-                .map((exam) => (
-                  <div key={exam.id} className="w-full bg-white rounded-lg shadow-md p-6 mb-6">
+                .map((exam, index) => (
+                  <div
+                    key={exam.id}
+                    className="w-full bg-white rounded-lg shadow-md p-6 mb-6 animate-slide-up"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
                     <div className="flex flex-col sm:flex-row justify-between items-start mb-4">
                       <div>
                         <h3 className="text-xl font-bold text-black">{exam.title}</h3>
@@ -291,19 +305,19 @@ const ExamSchedulePage = () => {
                       </div>
                       <div className="flex space-x-2 mt-4 sm:mt-0">
                         <button
-                          className="px-4 py-2 border border-[#0056B3] text-[#0056B3] text-sm font-bold rounded hover:bg-[#e6f0ff] transition"
+                          className="px-4 py-2 border border-[#0056B3] text-[#0056B3] text-sm font-bold rounded hover:bg-[#e6f0ff] transition transform hover:scale-105"
                           onClick={handleRecommendMajor}
                         >
                           Khuyến nghị ngành học
                         </button>
                         <button
-                          className="px-4 py-2 border border-[#0056B3] text-[#0056B3] text-sm font-bold rounded hover:bg-[#e6f0ff] transition"
+                          className="px-4 py-2 border border-[#0056B3] text-[#0056B3] text-sm font-bold rounded hover:bg-[#e6f0ff] transition transform hover:scale-105"
                           onClick={handleDownloadResult}
                         >
                           Tải kết quả thi
                         </button>
                         <button
-                          className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition"
+                          className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
                           onClick={handleRequestReview}
                         >
                           Đăng ký phúc khảo
@@ -312,7 +326,15 @@ const ExamSchedulePage = () => {
                     </div>
                     <div className="text-center mb-6">
                       <p className="text-sm text-gray-500">Tổng điểm</p>
-                      <p className="text-4xl font-bold text-[#059669]">{exam.scores?.total || 'N/A'}</p>
+                      <p className="text-4xl font-bold text-[#059669]">
+                        <CountUp
+                          start={0}
+                          end={exam.scores?.total || 0}
+                          duration={2}
+                          useEasing={true}
+                          separator=","
+                        />
+                      </p>
                     </div>
                     <div className="space-y-4">
                       <div className="flex flex-col">
@@ -404,12 +426,12 @@ const ExamSchedulePage = () => {
             </>
           ) : (
             <>
-              <h2 className="text-xl font-bold text-black mb-6">Kỳ thi sắp diễn ra</h2>
+              <h2 className="text-xl font-bold text-black mb-6 animate-fade-in">Kỳ thi sắp diễn ra</h2>
               {exams.length === 0 ? (
                 <p className="text-center text-gray-500">Hiện tại chưa có kỳ thi nào.</p>
               ) : (
                 <div className="space-y-6">
-                  {exams.map((exam) => {
+                  {exams.map((exam, index) => {
                     const {
                       isBeforeRegistration,
                       isDuringRegistration,
@@ -443,7 +465,8 @@ const ExamSchedulePage = () => {
                     return (
                       <div
                         key={exam.id}
-                        className="w-full p-6 bg-white rounded-lg border border-gray-200 shadow-sm"
+                        className="w-full p-6 bg-white rounded-lg border border-gray-200 shadow-sm transform transition-all duration-300 hover:scale-105 hover:shadow-md animate-slide-up"
+                        style={{ animationDelay: `${index * 100}ms` }}
                       >
                         <div className="flex flex-col sm:flex-row justify-between items-start">
                           <div>
@@ -471,7 +494,7 @@ const ExamSchedulePage = () => {
                           </div>
                           <div className="flex flex-col items-end space-y-2 mt-4 sm:mt-0">
                             <span
-                              className={`px-4 py-1 text-sm rounded-full bg-gray-200 text-black flex items-center justify-center`}
+                              className={`px-4 py-1 text-sm rounded-full bg-gray-200 text-black flex items-center justify-center transform transition-all duration-300 hover:scale-105`}
                             >
                               {statusText}
                             </span>
@@ -480,7 +503,7 @@ const ExamSchedulePage = () => {
                                 isAfterExam ? (
                                   hasResult ? (
                                     <button
-                                      className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition"
+                                      className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
                                       onClick={handleDownloadResult}
                                     >
                                       Xem kết quả
@@ -490,7 +513,7 @@ const ExamSchedulePage = () => {
                                   )
                                 ) : isAfterTicketAnnouncement ? (
                                   <button
-                                    className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition"
+                                    className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
                                     onClick={handleDownloadTicket}
                                   >
                                     Tải giấy báo dự thi
@@ -501,13 +524,13 @@ const ExamSchedulePage = () => {
                               ) : (
                                 <div className="flex space-x-2">
                                   <button
-                                    className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition"
+                                    className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
                                     onClick={() => handleAdjust(exam)}
                                   >
                                     Điều chỉnh
                                   </button>
                                   <button
-                                    className="px-4 py-2 bg-red-500 text-white text-sm font-bold rounded hover:bg-red-600 transition"
+                                    className="px-4 py-2 bg-red-500 text-white text-sm font-bold rounded hover:bg-red-600 transition transform hover:scale-105"
                                     onClick={() => handlePayment(exam)}
                                   >
                                     Thanh toán
@@ -517,7 +540,7 @@ const ExamSchedulePage = () => {
                             ) : isDuringRegistration ? (
                               <button
                                 aria-label={`Đăng ký kỳ thi ${exam.title}`}
-                                className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition"
+                                className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
                                 onClick={() => handleRegister(exam)}
                               >
                                 Đăng ký
@@ -536,14 +559,14 @@ const ExamSchedulePage = () => {
               )}
             </>
           )}
-          <h2 className="text-xl font-bold text-black mt-8 mb-6">Kỳ thi sắp tới</h2>
+          <h2 className="text-xl font-bold text-black mt-8 mb-6 animate-fade-in">Kỳ thi sắp tới</h2>
           <div className="space-y-6">
             {exams
               .filter((exam) => {
                 const { hasResult } = getExamStatus(exam);
                 return !hasResult;
               })
-              .map((exam) => {
+              .map((exam, index) => {
                 const { isBeforeRegistration, isDuringRegistration, isAfterTicketAnnouncement, isAfterExam } = getExamStatus(exam);
                 let statusText = '';
                 if (isBeforeRegistration) {
@@ -559,7 +582,8 @@ const ExamSchedulePage = () => {
                 return (
                   <div
                     key={exam.id}
-                    className="w-full p-6 bg-white rounded-lg border border-gray-200 shadow-sm"
+                    className="w-full p-6 bg-white rounded-lg border border-gray-200 shadow-sm transform transition-all duration-300 hover:scale-105 hover:shadow-md animate-slide-up"
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className="flex flex-col sm:flex-row justify-between items-start">
                       <div>
@@ -570,12 +594,12 @@ const ExamSchedulePage = () => {
                         </p>
                       </div>
                       <div className="flex flex-col items-end space-y-2 mt-4 sm:mt-0">
-                        <span className="px-4 py-1 text-sm rounded-full bg-gray-200 text-black flex items-center justify-center">
+                        <span className="px-4 py-1 text-sm rounded-full bg-gray-200 text-black flex items-center justify-center transform transition-all duration-300 hover:scale-105">
                           {statusText}
                         </span>
                         {isDuringRegistration ? (
                           <button
-                            className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition"
+                            className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
                             onClick={() => handleRegister(exam)}
                           >
                             Đăng ký
@@ -598,7 +622,7 @@ const ExamSchedulePage = () => {
               className="fixed inset-0 bg-black opacity-50"
               onClick={handleCloseModal}
             ></div>
-            <div className="bg-white rounded-lg shadow-md p-6 z-50 flex flex-col justify-between w-[640px] max-h-[80vh] overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-md p-6 z-50 flex flex-col justify-between w-[640px] max-h-[80vh] overflow-y-auto animate-fade-in animate-scale-in">
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
                   Khuyến nghị ngành học
@@ -637,7 +661,7 @@ const ExamSchedulePage = () => {
               <div className="flex justify-end space-x-2 mt-4">
                 <button
                   onClick={handleCloseModal}
-                  className="py-2 px-4 bg-white border border-gray-300 text-gray-800 rounded font-medium hover:bg-gray-100 transition-colors"
+                  className="py-2 px-4 bg-white border border-gray-300 text-gray-800 rounded font-medium hover:bg-gray-100 transition transform hover:scale-105"
                 >
                   Đóng
                 </button>
