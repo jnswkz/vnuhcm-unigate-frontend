@@ -13,11 +13,11 @@ const NewsCard = ({ image, date, title, description, id }) => {
       </div>
       <div className="p-5">
         <p className="text-gray-500 text-sm">{date}</p>
-        <h2 className="text-blue-600 text-xl font-bold mt-2 hover:text-blue-800 transition-colors duration-300">{title}</h2>
+        <h2 className="text-[#0056B3] text-xl font-bold mt-2 hover:text-[#003f8a] transition-colors duration-300">{title}</h2>
         <p className="text-gray-700 mt-2 line-clamp-3">{description}</p>
         <Link
           to={`/news/${id}`}
-          className="mt-5 bg-blue-50 text-blue-600 px-6 py-3 rounded-md font-bold inline-block hover:bg-blue-600 hover:text-white transition-all duration-300 group flex items-center"
+          className="mt-5 bg-[#e6f0ff] text-[#0056B3] px-6 py-3 rounded-md font-bold inline-block hover:bg-[#0056B3] hover:text-white transition-all duration-300 group flex items-center"
         >
           <span>Xem chi tiết</span>
           <svg 
