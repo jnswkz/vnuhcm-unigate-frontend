@@ -1,7 +1,14 @@
 import React from 'react';
 import AdminSidebar from "../components/AdminSidebar";
+import { useAuth } from "../components/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
+  const { user, isLoggedIn } = useAuth();
+
+  if (!isLoggedIn) return <Navigate to="/dang-nhap" />;
+  if (user?.role !== "admin") return <Navigate to="/" />;
+
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />

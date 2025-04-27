@@ -48,18 +48,28 @@ import PostPage from './pages/Forum/postPage.jsx';
 import PostDetail  from './pages/Forum/PostDetails.jsx';
 import ReplyBox from './pages/Forum/Reply.jsx';
 import Chatbot from './components/dashboard/Chatbot';
+import { AuthProvider, useAuth } from './components/AuthContext'; 
+
 // import jwt from 'jwt-decode'
 
 // Định nghĩa base URL của API
 
-function ProtectedRoute({ children, isLoggedIn }) {
+function ProtectedRoute({ children }) {
+  const { isLoggedIn, isLoadingAuth } = useAuth();
   const location = useLocation();
+
+  if (isLoadingAuth) {
+    return <div>Đang kiểm tra đăng nhập...</div>; 
+  }
+
   return isLoggedIn ? children : <Navigate to="/dang-nhap" state={{ from: location }} replace />;
 }
 
-function AdminRoute({ children, isLoggedIn, user }) {
+function AdminRoute({ children }) {
+  const { isLoggedIn, user } = useAuth();  
   const location = useLocation();
   const isAdmin = isLoggedIn && user?.role === 'admin';
+
   return isAdmin ? children : <Navigate to="/dang-nhap" state={{ from: location }} replace />;
 }
 
@@ -78,27 +88,9 @@ function MainLayout({ children, isLoggedIn, user, onLogout }) {
 }
 
 function AppContent() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Đặt mặc định là false để hiển thị giao diện chưa đăng nhập
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await api.get("/api/me");   
-        // alert(1);
-        setIsLoggedIn(true);
-        setUser(res.data);                      
-      } catch {
-        setIsLoggedIn(false);
-        setUser(null);
-        // alert(document.cookie);
-      }
-    };
-    checkAuth();
-  }, []);
+  const { isLoggedIn, user, setIsLoggedIn, setUser } = useAuth();
 
   const handleDownload = async (doc) => {
     try {
@@ -132,21 +124,25 @@ function AppContent() {
       const { access_token } = res.data;
       document.cookie = `access_token=${access_token}; path=/; max-age=3600`;
   
-      setIsLoggedIn(true);
-  
       const userRes = await api.get("/api/me", {
         headers: {
           Authorization: `Bearer ${access_token}`
         }
       });
       const userData = userRes.data;
+  
       setUser(userData);
+      setIsLoggedIn(true);
+  
+      toast.success(
+        userData.role === 'admin'
+          ? "Đăng nhập thành công với quyền admin!"
+          : "Đăng nhập thành công!"
+      );
   
       if (userData.role === 'admin') {
-        toast.success("Đăng nhập thành công với quyền admin!");
-        navigate("/admin");
+        navigate("/admin");   
       } else {
-        toast.success("Đăng nhập thành công!");
         navigate("/");
       }
   
@@ -282,7 +278,7 @@ function AppContent() {
         <Route
           path="/admin/*"
           element={
-            <AdminRoute isLoggedIn={isLoggedIn} user={user}>
+            <AdminRoute>
               <AdminLayout>
                 <Routes>
                   <Route path="overview" element={<Admin />} />
@@ -309,8 +305,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }

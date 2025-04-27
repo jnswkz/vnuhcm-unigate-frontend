@@ -151,7 +151,7 @@ export default function Header({ user, onLogout }) {
         {/* Avatar */}
         <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
           <span className="text-gray-600 text-sm font-medium font-roboto">
-            {user?.name?.charAt(0) || 'U'}
+            {user?.ho_ten?.charAt(0) || 'U'}
           </span>
         </div>
 
@@ -161,7 +161,7 @@ export default function Header({ user, onLogout }) {
             className="flex items-center space-x-1 focus:outline-none"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <span className="text-gray-700 font-medium font-roboto">{user?.name || 'User'}</span>
+            <span className="text-gray-700 font-medium font-roboto">{user?.ho_ten || 'User'}</span>
             <svg
               className="w-5 h-5 text-gray-600"
               fill="none"
@@ -185,7 +185,7 @@ export default function Header({ user, onLogout }) {
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
                     <span className="text-gray-600 text-lg font-medium font-roboto">
-                      {user?.name?.charAt(0) || 'U'}
+                      {user?.ho_ten?.charAt(0) || 'U'}
                     </span>
                   </div>
                   <div>

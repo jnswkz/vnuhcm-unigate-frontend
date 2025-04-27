@@ -4,14 +4,10 @@ import ActionCard from './ActionCard';
 import NewsCard from './NewsCard';
 import Chatbot from './Chatbot';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../components/AuthContext.jsx';
 
 export default function Dashboard() {
-  const user = {
-    name: "Võ Phương Thanh",
-    email: "vophuongthanh604@outlook.com",
-    phone: "0885583693",
-  };
-
+  const { user } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showChatbot, setShowChatbot] = useState(false);
 
@@ -154,7 +150,7 @@ export default function Dashboard() {
       <div className="w-full h-[198px] bg-[#EBF5FF] relative">
         <div className="max-w-[1272px] mx-auto pt-10 animate-slide-right">
           <h1 className="text-[32px] font-bold text-[#0056B3] font-roboto leading-[48px]">
-            Xin chào, {user.name}!
+            Xin chào, {user.ho_ten}!
           </h1>
           <p className="mt-4 text-[18px] text-[#0056B3] font-roboto leading-[27px] max-w-[1161px]">
             Chào mừng bạn đến với hệ thống tuyển sinh trực tuyến của Đại học Quốc gia TP. Hồ Chí Minh.

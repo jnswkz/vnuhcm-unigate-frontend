@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/HeaderDangNhap'; 
+import { useAuth } from "../components/AuthContext";
 
 const ProfilePage = () => {
-  const user = {
-    name: "Nguyen Van A",
-    email: "nguyenvana@student.edu.vn",
-    phone: "0912345678",
-  };
+  const { user } = useAuth();
+
+  if (!user) return <div>Đang tải...</div>;
+  // console.log("1");
+  // console.log(user);
 
   const schoolByProvince = {
     "An Giang": [
@@ -1301,19 +1302,19 @@ const ProfilePage = () => {
   };
 
   const [profileData, setProfileData] = useState({
-    cccd: "002947382146",
-    fullName: "Võ Phương Thanh",
-    gender: "Nữ",
-    dob: "02/09/2007",
-    ethnicity: "Kinh",
-    permanentAddress: "10 Khu 9, xã Ninh Dân, huyện Thanh Ba, tỉnh Phú Thọ",
-    contactAddress: "10 Khu 9, xã Ninh Dân, huyện Thanh Ba, tỉnh Phú Thọ",
-    province: "Hà Nội",
-    school: "THPT Nguyễn Trãi-Ba Đình",
-    email: "vophuongthanh604@outlook.com",
-    phone: "0885583693",
-    priorityArea: "", 
-    priorityObject: "",
+      cccd: user.cccd || "",
+      fullName: user.ho_ten || "",
+      gender: user.gioi_tinh || "",
+      dob: user.ngay_sinh ? user.ngay_sinh.split("-").reverse().join("/") : "", 
+      ethnicity: user.dan_toc || "",
+      permanentAddress: user.dia_chi_thuong_tru || "",
+      contactAddress: user.dia_chi_lien_lac || "",
+      province: "", 
+      school: "",   
+      email: user.email || "",
+      phone: user.so_dien_thoai || "",
+      priorityArea: user.khu_vuc_uu_tien || "",
+      priorityObject: user.doi_tuong_uu_tien || "",
   });
 
   const [isEditing, setIsEditing] = useState(false);

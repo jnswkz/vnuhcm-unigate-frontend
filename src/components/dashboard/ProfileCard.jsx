@@ -10,7 +10,7 @@ export default function ProfileCard({ user }) {
             />
             <div>
               <h3 className="text-[16px] font-bold text-black font-roboto leading-[24px]">
-                {user.name}
+                {user.ho_ten}
               </h3>
             </div>
           </div>

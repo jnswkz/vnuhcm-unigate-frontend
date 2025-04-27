@@ -4,9 +4,10 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { LetterText } from "lucide-react";
 import ReplyBox from "./Reply";
+import { useAuth } from "../../components/AuthContext.jsx";
 
 export default function PostDetail() {
-
+    const { user } = useAuth();
 
     const { id } = useParams();
 
@@ -46,7 +47,7 @@ export default function PostDetail() {
             },
             body: JSON.stringify({
               answer: content,       // nội dung trả lời
-              username: "user123",   // tên người dùng (nếu có)
+              username: user.cccd,   // tên người dùng (nếu có)
             })
           });
       
