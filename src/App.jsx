@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import api from "./axios"; // Import axios instance
+import api from "./api/axios"; // Import axios instance
 
 // Import các components và pages
 import HeaderDangNhap from "./components/HeaderDangNhap";

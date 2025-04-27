@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify'; // Import Toastify
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS của Toastify
 import Footer from "../components/Footer"; // Import Footer component
+import api from "../api/axios"; 
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
@@ -107,33 +108,56 @@ export default function RegistrationForm() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitted(true);
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length === 0) {
-      toast.success('Đăng ký thành công!', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      try {
+        const res = await api.post("/api/register", {
+          cccd: formData.cccd,
+          full_name: formData.fullName,
+          email: formData.email,
+          phone_number: formData.phone,
+          password: formData.password
+        });
 
-      setFormData({
-        cccd: '',
-        fullName: '',
-        email: '',
-        phone: '',
-        password: '',
-        confirmPassword: ''
-      });
-      setAgreeTerms(false);
-      setNotRobot(false);
-      setFormSubmitted(false);
+        toast.success('Đăng ký thành công!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        // Reset form
+        setFormData({
+          cccd: '',
+          fullName: '',
+          email: '',
+          phone: '',
+          password: '',
+          confirmPassword: ''
+        });
+        setAgreeTerms(false);
+        setNotRobot(false);
+        setFormSubmitted(false);
+
+      } catch (error) {
+        const errorMsg = error.response?.data?.detail || 'Có lỗi xảy ra khi đăng ký.';
+        toast.error(errorMsg, {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } else {
       setErrors(validationErrors);
       toast.error('Vui lòng kiểm tra lại thông tin!', {

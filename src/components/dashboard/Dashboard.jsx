@@ -18,7 +18,7 @@ export default function Dashboard() {
   // Cập nhật thời gian mỗi giây
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(new Date());nn
+      setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(interval);
   }, []);

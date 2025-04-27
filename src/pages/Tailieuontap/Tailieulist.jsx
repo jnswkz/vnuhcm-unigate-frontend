@@ -1,7 +1,7 @@
 // TaiLieuList.jsx – chỉnh màu tag (background trắng, chữ đen; khi chọn: xanh + trắng)
 import React, { useEffect, useState } from 'react';
 import { FileText, Download} from 'lucide-react';
-import api from '../../axios'
+import api from '../../api/axios'
 
 const TaiLieuList = ({ handleDownload }) => {
   const [documents, setDocuments] = useState([]);
