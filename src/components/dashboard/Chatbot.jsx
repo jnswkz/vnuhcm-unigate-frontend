@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import api from '../../api/axios';
+import ReactMarkdown from 'react-markdown'; 
 
 export default function Chatbot({ onClose }) {
   const [messages, setMessages] = useState([
@@ -6,21 +8,35 @@ export default function Chatbot({ onClose }) {
   ]);
   const [input, setInput] = useState('');
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (input.trim() === '') return; // Không gửi nếu input rỗng
-
-    // Thêm tin nhắn của người dùng
-    setMessages([...messages, { id: messages.length + 1, text: input, isBot: false }]);
-    setInput('');
-
-    // Giả lập phản hồi của bot
-    setTimeout(() => {
-      setMessages((prev) => [
+  
+    // Thêm tin nhắn của người dùng trước
+    setMessages(prev => [...prev, { id: prev.length + 1, text: input, isBot: false }]);
+  
+    const currentInput = input; // Lưu input hiện tại
+    setInput(''); // Clear input field
+  
+    try {
+      const response = await api.post("/api/get-bot-answer", {
+        question: currentInput,
+      });
+  
+      const botReply = response.data.reply;
+  
+      setMessages(prev => [
         ...prev,
-        { id: prev.length + 1, text: "Cảm ơn câu hỏi của bạn! Tôi sẽ trả lời ngay.", isBot: true },
+        { id: prev.length + 1, text: botReply, isBot: true },
       ]);
-    }, 1000);
+    } catch (error) {
+      console.error('Error getting bot reply:', error);
+      setMessages(prev => [
+        ...prev,
+        { id: prev.length + 1, text: 'Xin lỗi, hệ thống đang gặp lỗi. Vui lòng thử lại.', isBot: true },
+      ]);
+    }
   };
+  
 
   return (
     <div className="fixed bottom-6 right-6 w-[450px] h-[600px] bg-white border-2 border-[#9333EA] rounded-xl shadow-2xl flex flex-col animate-fade-in">
@@ -60,7 +76,11 @@ export default function Chatbot({ onClose }) {
                   : 'bg-[#9333EA] text-white rounded-br-none'
               }`}
             >
-              <p className="text-sm font-roboto">{message.text}</p>
+              <div className="text-sm font-roboto">
+                <ReactMarkdown>
+                  {message.text}
+                </ReactMarkdown>
+              </div>
             </div>
           </div>
         ))}
