@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../../api/axios';
 
 const Documents = () => {
   const [selectedCategory, setSelectedCategory] = useState('Tất cả');
@@ -8,35 +9,42 @@ const Documents = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [documentToDelete, setDocumentToDelete] = useState(null);
-  const [documents, setDocuments] = useState([
-    { id: 1, name: 'Đề thi toán 2023', date: '2023-12-01', downloads: 145, size: '2.5MB', category: 'Toán học' },
-    { id: 2, name: 'Tài liệu văn học', date: '2023-11-28', downloads: 89, size: '1.8MB', category: 'Ngữ văn' },
-    { id: 3, name: 'English Grammar', date: '2023-11-25', downloads: 234, size: '3.1MB', category: 'Tiếng Anh' },
-    { id: 4, name: 'Bài tập vật lý', date: '2023-11-22', downloads: 167, size: '4.2MB', category: 'Vật lý' },
-    { id: 5, name: 'Hóa học cơ bản', date: '2023-11-20', downloads: 198, size: '2.9MB', category: 'Hóa học' },
-  ]);
+  const [documents, setDocuments] = useState([]);
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await api.get('/api/get-documents-list');
+        const formattedDocs = response.data.map((doc) => ({
+          id: doc.id,
+          name: doc.title,            // lấy title làm name
+          filename: doc.filename,     // giữ filename nếu cần download
+          date: doc.date,
+          downloads: doc.downloads,
+          size: doc.size,
+          tags: doc.tags || [],        // đảm bảo tags tồn tại
+          category: doc.tags && doc.tags.length > 0 ? doc.tags[0] : 'Khác', // chọn tag đầu tiên làm category
+        }));
+        setDocuments(formattedDocs);
+      } catch (error) {
+        console.error('Error fetching documents:', error);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
 
   const categories = [
     'Tất cả',
-    'Toán học',
-    'Ngữ văn',
-    'Tiếng Anh',
-    'Vật lý',
-    'Hóa học',
-    'Sinh học',
-    'Lịch sử',
-    'Địa lý',
-    'Khác',
+    ...Array.from(new Set(documents.flatMap(doc => doc.tags || [])))
   ];
 
   const itemsPerPage = 5;
 
-  // Lọc và tìm kiếm tài liệu
   const filteredDocuments = documents
-    .filter((doc) => selectedCategory === 'Tất cả' || doc.category === selectedCategory)
-    .filter((doc) => doc.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    .filter((doc) => selectedCategory === 'Tất cả' || (doc.tags && doc.tags.includes(selectedCategory)))
+    .filter((doc) => doc.name && doc.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  // Phân trang
   const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
   const paginatedDocuments = filteredDocuments.slice(
     (currentPage - 1) * itemsPerPage,
@@ -45,12 +53,12 @@ const Documents = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); // Reset về trang đầu khi thay đổi danh mục
+    setCurrentPage(1);
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset về trang đầu khi tìm kiếm
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page) => {
@@ -78,17 +86,17 @@ const Documents = () => {
         date: new Date().toISOString().split('T')[0],
         downloads: 0,
         size: `${(selectedFile.size / (1024 * 1024)).toFixed(1)}MB`,
-        category: selectedCategory === 'Tất cả' ? 'Khác' : selectedCategory,
+        tags: ['Khác'],
+        category: 'Khác',
       };
       setDocuments([...documents, newDoc]);
-      console.log(`Đăng tải tài liệu: ${selectedFile.name}`);
       handleUploadModalClose();
     }
   };
 
   const handleDownload = (docId) => {
     console.log(`Tải xuống tài liệu ID: ${docId}`);
-    // TODO: Thêm logic tải xuống tài liệu
+    // TODO: Viết hàm download theo doc.filename
   };
 
   const handleDeleteModalOpen = (docId) => {

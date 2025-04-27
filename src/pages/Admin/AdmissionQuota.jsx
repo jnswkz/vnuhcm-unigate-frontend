@@ -1,35 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-
+import api from '../../api/axios';
 const AdmissionQuota = () => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal chỉnh sửa
-  const [selectedQuota, setSelectedQuota] = useState(null); // Chỉ tiêu được chọn để chỉnh sửa
-  const [quotas, setQuotas] = useState([
-    {
-      id: 1,
-      majorCode: 'IT001',
-      major: 'Công nghệ thông tin',
-      schoolCode: 'QSC',
-      school: 'Trường Đại học Công nghệ Thông tin, ĐHQG TP.HCM',
-      quota: 90,
-    },
-    {
-      id: 2,
-      majorCode: 'BA002',
-      major: 'Quản trị kinh doanh',
-      schoolCode: 'QSE',
-      school: 'Trường Đại học Kinh tế - Luật, ĐHQG TP.HCM',
-      quota: 150,
-    },
-    {
-      id: 3,
-      majorCode: 'BIO003',
-      major: 'Sinh học',
-      schoolCode: 'QSN',
-      school: 'Trường Đại học Khoa học Tự nhiên, ĐHQG TP.HCM',
-      quota: 90,
-    },
-  ]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedQuota, setSelectedQuota] = useState(null);
+  const [quotas, setQuotas] = useState([]); // bắt đầu với mảng rỗng
   const [editQuota, setEditQuota] = useState({
     majorCode: '',
     major: '',
@@ -38,15 +13,46 @@ const AdmissionQuota = () => {
     quota: 0,
   });
 
+  const [selectedSchool, setSelectedSchool] = useState('');
+
+  // Fetch dữ liệu từ API
+  useEffect(() => {
+    const fetchQuotas = async () => {
+      try {
+        const res = await api.get('/api/get-university-details');
+        const data = res.data;
+
+        // Map lại dữ liệu đúng định dạng cần
+        const formattedData = data.map((item, index) => ({
+          id: index + 1, // tạo id tạm thời
+          majorCode: item.ma_nganh,
+          major: item.ten_nganh,
+          schoolCode: item.ma_truong_khoa,
+          school: item.ten_truong_khoa,
+          quota: item.chi_tieu_tuyen_sinh,
+        }));
+
+        setQuotas(formattedData);
+      } catch (error) {
+        console.error('Lỗi khi fetch quotas:', error);
+        toast.error('Không thể tải danh sách chỉ tiêu.');
+      }
+    };
+
+    fetchQuotas();
+  }, []);
+
   const schools = [
     { schoolCode: '', school: 'Tất cả trường' },
-    ...quotas.map((quota) => ({
-      schoolCode: quota.schoolCode,
-      school: quota.school,
-    })),
+    ...quotas
+      .map((quota) => ({
+        schoolCode: quota.schoolCode,
+        school: quota.school,
+      }))
+      .filter((value, index, self) =>
+        index === self.findIndex((v) => v.schoolCode === value.schoolCode)
+      ), // Xóa trùng trường
   ];
-
-  const [selectedSchool, setSelectedSchool] = useState(''); // Mặc định "Tất cả trường"
 
   const filteredQuotas = selectedSchool
     ? quotas.filter((quota) => quota.schoolCode === selectedSchool)
@@ -68,14 +74,27 @@ const AdmissionQuota = () => {
     setEditQuota((prev) => ({ ...prev, [name]: name === 'quota' ? parseInt(value) : value }));
   };
 
-  const handleEditQuota = () => {
-    setQuotas(
-      quotas.map((quota) =>
-        quota.id === selectedQuota.id ? { ...quota, ...editQuota } : quota
-      )
-    );
-    handleEditModalClose();
-    toast.success('Chỉnh sửa chỉ tiêu thành công!');
+  const handleEditQuota = async () => {
+    try {
+      // Gọi API để update
+      await api.post('/api/update-major-quota', {
+        major: editQuota.major,
+        quota: editQuota.quota,
+      });
+  
+      // Nếu gọi API thành công thì update local quotas
+      setQuotas(
+        quotas.map((quota) =>
+          quota.id === selectedQuota.id ? { ...quota, ...editQuota } : quota
+        )
+      );
+  
+      handleEditModalClose();
+      toast.success('Cập nhật chỉ tiêu thành công!');
+    } catch (error) {
+      console.error('Lỗi cập nhật quota:', error);
+      toast.error('Lỗi cập nhật chỉ tiêu!');
+    }
   };
 
   const handleSchoolChange = (e) => {
