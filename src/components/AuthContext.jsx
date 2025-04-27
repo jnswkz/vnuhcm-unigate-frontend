@@ -6,7 +6,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true); // 👈 thêm dòng này
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true); 
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
         if (!token) {
           setIsLoggedIn(false);
           setUser(null);
-          setIsLoadingAuth(false); // 👈 dừng loading
+          setIsLoadingAuth(false); 
           return;
         }
         const res = await api.get("/api/me", {
@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
         setIsLoggedIn(false);
         setUser(null);
       } finally {
-        setIsLoadingAuth(false); // 👈 đảm bảo luôn tắt loading
+        setIsLoadingAuth(false); 
       }
     };
     checkAuth();
