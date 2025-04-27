@@ -96,7 +96,7 @@ const PaymentSuccess = () => {
             </div>
             <div className="flex justify-between mb-2">
               <span className="text-[#6B7280]">Ngày thi</span>
-              <span className="text-black font-medium">15/03/2024</span>
+              <span className="text-black font-medium">01/06/20255</span>
             </div>
             <div className="flex justify-between mb-2">
               <span className="text-[#6B7280]">Địa điểm</span>

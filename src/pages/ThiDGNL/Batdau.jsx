@@ -168,34 +168,25 @@ const ExamSchedulePage = () => {
   const handleRecommendMajor = () => {
     const majors = [
       {
-        code: '7480201',
-        name: 'Công nghệ thông tin',
-        school: 'ĐH Công nghệ thông tin - ĐHQG TPHCM',
-        previousScore: 950,
+        code: '7343057969630',
+        name: 'QST7480101.TT',
+        school: 'Khoa học Máy tính (CT Tiên tiến)',
+        rank: 1,
+        previousScore: 1035,
       },
       {
-        code: '7480101',
-        name: 'Khoa học máy tính',
-        school: 'ĐH Bách khoa - ĐHQG TPHCM',
-        previousScore: 925,
+        code: '7343057969630',
+        name: 'QST7480107',
+        school: 'Trí tuệ Nhân tạo',
+        rank: 2,
+        previousScore: 1001,
       },
       {
-        code: '7340101',
-        name: 'Quản trị kinh doanh',
-        school: 'ĐH Kinh tế - Luật ĐHQG TPHCM',
-        previousScore: 900,
-      },
-      {
-        code: '7340115',
-        name: 'Marketing',
-        school: 'ĐH Kinh tế - Luật ĐHQG TPHCM',
-        previousScore: 875,
-      },
-      {
-        code: '7720101',
-        name: 'Y khoa',
-        school: 'ĐH Khoa học tự nhiên - ĐHQG TPHCM',
-        previousScore: 990,
+        code: '7343057969630',
+        name: 'QSC7480107',
+        school: 'Trí tuệ Nhân tạo',
+        rank: 3,
+        previousScore: 970,
       },
     ];
     setRecommendedMajors(majors);
@@ -634,6 +625,7 @@ const ExamSchedulePage = () => {
                         <th className="p-3 text-sm font-semibold text-gray-700">Mã ngành</th>
                         <th className="p-3 text-sm font-semibold text-gray-700">Tên ngành</th>
                         <th className="p-3 text-sm font-semibold text-gray-700">Tên trường</th>
+                        <th className="p-3 text-sm font-semibold text-gray-700">Xếp hạng</th>
                         <th className="p-3 text-sm font-semibold text-gray-700">Điểm chuẩn năm trước</th>
                       </tr>
                     </thead>
@@ -648,6 +640,7 @@ const ExamSchedulePage = () => {
                           <td className="p-3 text-sm text-gray-900">{major.code}</td>
                           <td className="p-3 text-sm text-gray-900">{major.name}</td>
                           <td className="p-3 text-sm text-gray-900">{major.school}</td>
+                          <td className="p-3 text-sm text-gray-900">{major.rank}</td>
                           <td className="p-3 text-sm text-gray-900">{major.previousScore}</td>
                         </tr>
                       ))}
