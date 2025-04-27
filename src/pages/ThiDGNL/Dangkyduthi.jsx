@@ -129,9 +129,31 @@ const ExamRegistrationForm = () => {
             value={formData.examLocation}
             onChange={handleInputChange}
           >
+            <option value="tp-ho-chi-minh">TP. Hồ Chí Minh</option>
+            <option value="thua-thien-hue">Thừa Thiên Huế</option>
+            <option value="da-nang">Đà Nẵng</option>
+            <option value="quang-nam">Quảng Nam</option>
+            <option value="quang-ngai">Quảng Ngãi</option>
+            <option value="binh-dinh">Bình Định</option>
+            <option value="phu-yen">Phú Yên</option>
             <option value="khanh-hoa">Khánh Hòa</option>
-            <option value="ho-chi-minh">Hồ Chí Minh</option>
-            <option value="ha-noi">Hà Nội</option>
+            <option value="lam-dong">Lâm Đồng</option>
+            <option value="ninh-thuan">Ninh Thuận</option>
+            <option value="binh-thuan">Bình Thuận</option>
+            <option value="dong-nai">Đồng Nai</option>
+            <option value="ba-ria-vung-tau">Bà Rịa - Vũng Tàu</option>
+            <option value="tay-ninh">Tây Ninh</option>
+            <option value="dong-thap">Đồng Tháp</option>
+            <option value="an-giang">An Giang</option>
+            <option value="kien-giang">Kiên Giang</option>
+            <option value="can-tho">Cần Thơ</option>
+            <option value="ca-mau">Cà Mau</option>
+            <option value="bac-lieu">Bạc Liêu</option>
+            <option value="vinh-long">Vĩnh Long</option>
+            <option value="tien-giang">Tiền Giang</option>
+            <option value="dak-lak">Đắk Lắk</option>
+            <option value="binh-phuoc">Bình Phước</option>
+
           </select>
         </div>
 
