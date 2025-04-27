@@ -48,7 +48,8 @@ export default function CreatePostForm() {
   };
 
   return (
-    <div className="max-w-5xl p-6 bg-white !justify-center mx-auto">
+    <div className="w-[70%] p-6 bg-white !justify-center mx-auto mt-24">
+
       <h1 className="!text-3xl font-bold mb-6 text-left">Tạo bài viết mới</h1>
 
       {/* Chuyên mục */}

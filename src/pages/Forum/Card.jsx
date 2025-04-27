@@ -67,14 +67,14 @@ export function PostCard({ title, content, description, id, postCount }) {
         <h3 className="text-blue-700 font-semibold text-left text-2xl pb-2">{title}</h3>
         <p className="text-sm text-gray-500 text-left text-2xl pb-2">{description}</p>
         <div className="flex items-center text-sm text-gray-600 mt-2 gap-6">
-          <span className="flex items-center gap-1">
+          {/* <span className="flex items-center gap-1">
             <FileText className="w-4 h-4" />
             {postCount} bài viết
           </span>
           <span className="flex items-center gap-1">
             <Lock className="w-4 h-4" />
             Bài viết mới nhất: <span className="font-medium text-black">?</span>
-          </span>
+          </span> */}
         </div>
       </div>
 
@@ -137,7 +137,7 @@ export function CommentCard({ author, time, content, likes }) {
 
         </div>
         <div>
-          <p className="font-semibold text-black">{author || "Bombadilo crocodilo"}</p>
+          <p className="font-semibold text-black">{author || "Ẩn danh"}</p>
           <p className="text-xs text-gray-500">{time || " "}</p>
         </div>
       </div>

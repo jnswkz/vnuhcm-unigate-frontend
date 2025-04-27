@@ -216,7 +216,7 @@ function AppContent() {
                 <Route
                   path="/xet-tuyen"
                   element={
-                    <ProtectedRoute isLoggedIn={isLoggedIn}>
+                    <ProtectedRoute >
                       <Outlet />
                     </ProtectedRoute>
                   }
@@ -230,7 +230,7 @@ function AppContent() {
                 <Route
                   path="/gioi-thieu"
                   element={
-                    <ProtectedRoute isLoggedIn={true}>
+                    <ProtectedRoute>
                       <div className="flex flex-col">
                         <Outlet />
                       </div>
@@ -244,28 +244,25 @@ function AppContent() {
                   <Route path="quy-che-thi" element={<QuyCheThi />} /> {/* Thêm route mới */}
                 </Route>
 
-                <Route
-                
-                  path="/dien-dan"
-                  element={
-                    <ProtectedRoute isLoggedIn={isLoggedIn}>
-                      <Forum />
+                <Route path="/dien-dan" element={
+                    <ProtectedRoute>
+                      <Outlet />
                     </ProtectedRoute>
                   }>
-                    <Route path="create-post" element={<CreatePostForm />} />
-                    <Route path="posts_page">
-                      <Route path=":title" element={<PostPage />} />
-                    </Route>
-                    <Route path="post">
-                      <Route path=":id" element={<PostDetail />} />
-                    </Route>
-
+                  <Route index element={<Forum />} /> 
+                  <Route path="create-post" element={<CreatePostForm />} />
+                  <Route path="posts_page">
+                    <Route path=":title" element={<PostPage />} />
                   </Route>
+                  <Route path="post">
+                    <Route path=":id" element={<PostDetail />} />
+                  </Route>
+                </Route>
 
                 <Route
                   path="/dashboard/*"
                   element={
-                    <ProtectedRoute isLoggedIn={isLoggedIn}>
+                    <ProtectedRoute>
                       <Dashboard />
                     </ProtectedRoute>
                   }

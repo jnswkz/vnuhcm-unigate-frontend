@@ -23,7 +23,7 @@ export default function ForumHeader() {
 
 
         <button className="!bg-blue-700 hover:!bg-blue-800 text-white text-sm px-4 py-2 rounded-lg" 
-         onClick = {() => window.location.href = '/dien-dan/create_post'}
+         onClick = {() => window.location.href = '/dien-dan/create-post'}
         >
           Tạo bài viết mới
         </button>
