@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../api/axios'; // import axios instance của bạn
 
 export default function Examinees() {
-  const navigate = useNavigate(); // Thêm useNavigate để điều hướng
+  const navigate = useNavigate();
 
-  // Giả lập dữ liệu thí sinh
-  const [examinees, setExaminees] = useState([
-    { id: 1, cccd: '079200009012', name: 'Le Van C', dob: '2000-03-03', status: 'Có cập nhật mới' },
-    { id: 2, cccd: '079200001234', name: 'Nguyen Van A', dob: '2000-01-01', status: 'Đã duyệt' },
-    { id: 3, cccd: '079200005678', name: 'Tran Thi B', dob: '2000-02-02', status: 'Chưa duyệt' },
-  ]);
-
-  // State cho ô tìm kiếm
+  const [examinees, setExaminees] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
-  // State cho bộ lọc trạng thái
   const [filterStatus, setFilterStatus] = useState('Tất cả');
 
-  // Lọc danh sách thí sinh dựa trên ô tìm kiếm và trạng thái
+  // Fetch thí sinh từ API khi mount component
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const res = await api.get('/api/get-all-students');
+        const students = res.data.map((student, index) => ({
+          id: index + 1, // Bạn có thể bỏ nếu muốn
+          cccd: student.cccd,
+          name: student.ho_ten,
+          dob: student.ngay_sinh,
+          status: 'Chưa duyệt', // Giả định trạng thái nếu backend chưa trả
+          fullData: student // giữ bản ghi gốc để sửa sau
+        }));
+        setExaminees(students);
+      } catch (error) {
+        console.error('Lỗi khi fetch danh sách thí sinh:', error);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+
+  // Lọc theo tìm kiếm và trạng thái
   const filteredExaminees = examinees.filter((examinee) => {
     const matchesSearch =
       examinee.cccd.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -27,25 +41,34 @@ export default function Examinees() {
     return matchesSearch && matchesStatus;
   });
 
-  // Hàm xử lý Thêm mới (giả lập)
+  const handleApprove = (cccd) => {
+    setExaminees(prev =>
+      prev.map(examinee =>
+        examinee.cccd === cccd ? { ...examinee, status: 'Đã duyệt' } : examinee
+      )
+    );
+  };
+
   const handleAddNew = () => {
-    console.log('Thêm mới thí sinh');
+    echo("under maintenance");
   };
 
-  // Hàm xử lý chỉnh sửa (chuyển hướng đến trang chi tiết)
   const handleEdit = (examinee) => {
-    navigate(`/admin/examinees/${examinee.id}`, { state: { examinee } });
+    navigate(`/admin/examinees/${examinee.cccd}`, { state: { examinee } });
   };
 
-  // Hàm xử lý xóa (giả lập)
-  const handleDelete = (id) => {
-    setExaminees(examinees.filter((examinee) => examinee.id !== id));
-    console.log('Xóa thí sinh:', id);
+  const handleDelete = async (cccd) => {
+    try {
+      await api.delete(`/api/delete-student/${cccd}`); // cần viết thêm API xóa student nếu muốn
+      setExaminees(examinees.filter((examinee) => examinee.cccd !== cccd));
+    } catch (error) {
+      console.error('Lỗi khi xóa thí sinh:', error);
+    }
   };
 
   return (
     <div className="p-6">
-      {/* Tiêu đề và điều khiển */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-[24px] font-bold text-[#0056B3]">Quản lý Thí sinh</h1>
         <button
@@ -56,7 +79,7 @@ export default function Examinees() {
         </button>
       </div>
 
-      {/* Ô tìm kiếm */}
+      {/* Tìm kiếm */}
       <div className="mb-4">
         <input
           type="text"
@@ -67,59 +90,26 @@ export default function Examinees() {
         />
       </div>
 
-      {/* Bộ lọc trạng thái */}
+      {/* Bộ lọc */}
       <div className="mb-6">
         <div className="flex space-x-2">
-          <button
-            onClick={() => setFilterStatus('Tất cả')}
-            className={`px-4 py-2 rounded-md text-[14px] ${
-              filterStatus === 'Tất cả'
-                ? 'bg-[#0056B3] text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            Tất cả ({examinees.length})
-          </button>
-          <button
-            onClick={() => setFilterStatus('Đã duyệt')}
-            className={`px-4 py-2 rounded-md text-[14px] ${
-              filterStatus === 'Đã duyệt'
-                ? 'bg-[#0056B3] text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            Đã duyệt ({
-              examinees.filter((examinee) => examinee.status === 'Đã duyệt').length
-            })
-          </button>
-          <button
-            onClick={() => setFilterStatus('Có cập nhật mới')}
-            className={`px-4 py-2 rounded-md text-[14px] ${
-              filterStatus === 'Có cập nhật mới'
-                ? 'bg-[#0056B3] text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            Có cập nhật mới ({
-              examinees.filter((examinee) => examinee.status === 'Có cập nhật mới').length
-            })
-          </button>
-          <button
-            onClick={() => setFilterStatus('Chưa duyệt')}
-            className={`px-4 py-2 rounded-md text-[14px] ${
-              filterStatus === 'Chưa duyệt'
-                ? 'bg-[#0056B3] text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            Chưa duyệt ({
-              examinees.filter((examinee) => examinee.status === 'Chưa duyệt').length
-            })
-          </button>
+          {['Tất cả', 'Đã duyệt', 'Có cập nhật mới', 'Chưa duyệt'].map((status) => (
+            <button
+              key={status}
+              onClick={() => setFilterStatus(status)}
+              className={`px-4 py-2 rounded-md text-[14px] ${
+                filterStatus === status
+                  ? 'bg-[#0056B3] text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              {status} ({examinees.filter((ex) => status === 'Tất cả' || ex.status === status).length})
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Bảng danh sách thí sinh */}
+      {/* Bảng */}
       <div className="bg-white rounded-lg shadow-md overflow-x-auto">
         <table className="min-w-full table-auto">
           <thead>
@@ -133,7 +123,7 @@ export default function Examinees() {
           </thead>
           <tbody>
             {filteredExaminees.map((examinee) => (
-              <tr key={examinee.id} className="border-t border-gray-200 text-[14px] text-gray-900">
+              <tr key={examinee.cccd} className="border-t border-gray-200 text-[14px] text-gray-900">
                 <td className="px-6 py-4">{examinee.cccd}</td>
                 <td className="px-6 py-4">{examinee.name}</td>
                 <td className="px-6 py-4">{examinee.dob}</td>
@@ -152,17 +142,24 @@ export default function Examinees() {
                 </td>
                 <td className="px-6 py-4 flex space-x-2">
                   <button
-                    onClick={() => handleEdit(examinee)} // Truyền toàn bộ object examinee
+                    onClick={() => handleEdit(examinee)}
                     className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600"
                   >
                     Sửa
                   </button>
                   <button
-                    onClick={() => handleDelete(examinee.id)}
+                    onClick={() => handleDelete(examinee.cccd)}
                     className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-700"
                   >
                     Xóa
                   </button>
+                  <button
+                    onClick={() => handleApprove(examinee.cccd)}
+                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600"
+                  >
+                    Duyệt
+                  </button>
+
                 </td>
               </tr>
             ))}

@@ -66,8 +66,13 @@ function ProtectedRoute({ children }) {
 }
 
 function AdminRoute({ children }) {
-  const { isLoggedIn, user } = useAuth();  
+  const { isLoggedIn, isLoadingAuth, user } = useAuth();
   const location = useLocation();
+
+  if (isLoadingAuth) {
+    return <div>Đang kiểm tra đăng nhập...</div>; 
+  }
+
   const isAdmin = isLoggedIn && user?.role === 'admin';
 
   return isAdmin ? children : <Navigate to="/dang-nhap" state={{ from: location }} replace />;
@@ -191,7 +196,12 @@ function AppContent() {
                 <Route path="/dang-nhap" element={<LoginForm onLogin={handleLogin} />} />
                 <Route path="/dang-ky" element={<RegistrationForm />} />
                 <Route path="/change-password" element={<ChangePasswordPage />} />
-                <Route path="/thi-dgnl" element={<Batdau />} />
+                <Route path="/thi-dgnl" element={
+                  <ProtectedRoute>
+                    <Batdau />
+                  </ProtectedRoute>
+                } />
+
                 <Route path="/dang-ky/:examId" element={<Dangkyduthi />} />
                 <Route path="/sau-khi-xac-nhan" element={<Saukhixacnhan />} />
                 <Route path="/profile" element={<ProfilePage />} />
