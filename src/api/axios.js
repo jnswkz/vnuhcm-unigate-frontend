@@ -1,10 +1,14 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api", // Thay bằng URL của Backend
+const api = axios.create({
+  baseURL: "http://127.0.0.1:8000",
   headers: {
-    "Content-Type": "application/json",
-  },
+    "Authorization": `Bearer ${document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="))
+      ?.split("=")[1] || ""}`,
+    },
+  withCredentials: true,          
 });
 
-export default axiosInstance;
+export default api;
