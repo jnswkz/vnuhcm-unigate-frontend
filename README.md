@@ -49,18 +49,12 @@ Thực tế cho thấy, cơ sở hạ tầng công nghệ thông tin của ĐHQG
 * Xây dựng mô hình AI riêng nhằm tối đa cá nhân hóa trong việc tư vấn tuyển sinh.
 * Tích hợp Machine Learning để dự đoán xu hướng tuyển sinh.
 
-## Đội ngũ phát triển (Đội: JAPANESE GOBLIN)
-
-* **Huỳnh Hoàng Hưng:** Nhóm trưởng, Fullstack, Viết báo cáo.
-* **Nguyễn Hữu Lam Giang:** Database Administrator, Backend Lead, Fullstack.
-* **Nguyễn Khánh Vy:** Frontend, Thiết kế poster.
-* **Trần Hải Đông:** Fullstack.
-* **Nguyễn Xuân Thanh:** Frontend, Thiết kế poster.
-
 ## Tài liệu tham khảo
 
 * Trung tâm Khảo thí và Đánh giá Chất lượng đào tạo - Đại học Quốc gia TP.HCM, Đề án tổ chức Kỳ thi Đánh giá năng lực ĐHQG-HCM năm 2025, 2025
-
+* **Huỳnh Hoàng Hưng:** Team Leader, Fullstack, Report Writing.
+* **Nguyễn Hữu Lam Giang:** Database Developer, Backend Lead, Fullstack.
+* **Trần Hải Đông:** Fullstack, Database Developer.
 ---
 
 # VNUHCM-UNIGATE: Smart Admission Portal for VNU-HCM Competency Assessment Exam
@@ -111,14 +105,9 @@ The project utilizes modern, popular technologies with strong community support.
 * Develop a mobile application version.
 * Integrate Machine Learning to predict admission trends.
 
-## Development Team (Team: JAPANESE GOBLIN)
-
-* **Huỳnh Hoàng Hưng:** Team Leader, Fullstack, Report Writing.
-* **Nguyễn Hữu Lam Giang:** Database Administrator, Backend Lead, Fullstack.
-* **Nguyễn Khánh Vy:** Frontend, Poster Design.
-* **Trần Hải Đông:** Fullstack.
-* **Nguyễn Xuân Thanh:** Frontend, Poster Design.
-
 ## References
 
 * Center for Testing and Quality Assessment of Training - Vietnam National University, Ho Chi Minh City, Project Proposal for the 2025 VNU-HCM Competency Assessment Exam, 2025
+* **Huỳnh Hoàng Hưng:** Team Leader, Fullstack, Report Writing.
+* **Nguyễn Hữu Lam Giang:** Database Developer, Backend Lead, Fullstack.
+* **Trần Hải Đông:** Fullstack, Database Developer.
