@@ -52,6 +52,9 @@ Thực tế cho thấy, cơ sở hạ tầng công nghệ thông tin của ĐHQG
 ## Tài liệu tham khảo
 
 * Trung tâm Khảo thí và Đánh giá Chất lượng đào tạo - Đại học Quốc gia TP.HCM, Đề án tổ chức Kỳ thi Đánh giá năng lực ĐHQG-HCM năm 2025, 2025
+
+##
+
 * **Huỳnh Hoàng Hưng:** Team Leader, Fullstack, Report Writing.
 * **Nguyễn Hữu Lam Giang:** Database Developer, Backend Lead, Fullstack.
 * **Trần Hải Đông:** Fullstack, Database Developer.
@@ -108,6 +111,8 @@ The project utilizes modern, popular technologies with strong community support.
 ## References
 
 * Center for Testing and Quality Assessment of Training - Vietnam National University, Ho Chi Minh City, Project Proposal for the 2025 VNU-HCM Competency Assessment Exam, 2025
+
+##
 * **Huỳnh Hoàng Hưng:** Team Leader, Fullstack, Report Writing.
 * **Nguyễn Hữu Lam Giang:** Database Developer, Backend Lead, Fullstack.
 * **Trần Hải Đông:** Fullstack, Database Developer.
