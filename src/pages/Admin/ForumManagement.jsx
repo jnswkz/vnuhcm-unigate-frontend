@@ -11,10 +11,10 @@ const ForumManagement = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [activeTab, setActiveTab] = useState('Nội dung');
 
-  // Fetch bài viết từ API
+  
   const fetchPosts = async () => {
     try {
-      const res = await api.get("/api/get-posts"); // Cần có route này trên backend
+      const res = await api.get("/api/get-posts"); 
       const fetchedPosts = res.data.map(post => ({
         id: post.id,
         title: post.question || 'Không có tiêu đề',
@@ -23,9 +23,9 @@ const ForumManagement = () => {
         status: post.status || 'Chờ duyệt',
         comments: post.answer ? post.answer.length : 0,
         date: post.date || '',
-        flagged: false, // Chưa có cờ báo cáo trong dữ liệu API
+        flagged: false, 
         content: post.content || '',
-        answers: post.answer || [], // lưu câu trả lời để hiện bình luận
+        answers: post.answer || [], 
       }));
       setPosts(fetchedPosts);
     } catch (error) {

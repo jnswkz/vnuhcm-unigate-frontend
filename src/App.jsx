@@ -49,6 +49,7 @@ import PostDetail  from './pages/Forum/PostDetails.jsx';
 import ReplyBox from './pages/Forum/Reply.jsx';
 import Chatbot from './components/dashboard/Chatbot';
 import { AuthProvider, useAuth } from './components/AuthContext'; 
+import QnA from './pages/qna'; // Import QnA component
 
 // import jwt from 'jwt-decode'
 
@@ -221,7 +222,7 @@ function AppContent() {
                 <Route path="/bai-thi-thu" element={<Navigate to="/" replace/>} /> 
                 <Route path="/dang-ky-du-thi" element={<Navigate to="/dang-ky" replace />} />
                 <Route path="/tim-hieu-them" element={<Navigate to="/gioi-thieu/ky-thi" replace />} />
-
+                <Route path="/hoi-dap-thuong-gap" element={<QnA />} /> {/* Thêm route cho QnA */}
 
                 <Route
                   path="/xet-tuyen"

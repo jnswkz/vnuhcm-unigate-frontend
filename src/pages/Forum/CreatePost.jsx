@@ -1,21 +1,24 @@
 import { Bold, Italic, Link } from "lucide-react";
 import { useState, useEffect } from "react";
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePostForm() {
   const [topicChoice, setTopicChoice] = useState("");
   const [postTitle, setTitle] = useState("");
   const [postContent, setContent] = useState("");
+  const navigate = useNavigate();
 
 
   const handleSubmit = async () => {
     if (postTitle === "") {
-      alert("Vui lòng nhập tiêu đề!");
+      toast.error("Vui lòng nhập tiêu đề!");
       return
     }
 
     if (postContent === "") {
-      alert("Bạn không thể đăng một bài trống");
+      toast.error("Bạn không thể đăng một bài trống");
       return
     }
     
@@ -39,11 +42,12 @@ export default function CreatePostForm() {
       }
   
       const data = await response.json();
-      alert("Đăng bài thành công!");
+      toast.success("Đăng bài thành công!");
       console.log("Server trả về:", data);
+      navigate("/dien-dan");
     } catch (error) {
       console.error(error);
-      alert(error)
+      toast.error(error)
     }
   };
 

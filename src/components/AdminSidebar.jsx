@@ -6,7 +6,7 @@ export default function AdminSidebar() {
     <div className="w-[240px] bg-white h-screen fixed top-0 left-0 shadow-md">
       {/* Logo */}
       <div className="p-4 flex items-center space-x-2">
-        <img src="https://via.placeholder.com/40" alt="Logo" className="w-10 h-10" />
+        <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/f/fb/VNUHCM_logo.svg/1200px-VNUHCM_logo.svg.png" alt="Logo" className="w-10 h-10" />
         <h1 className="text-[18px] font-bold text-[#0056B3]">VNUHCM-UNIGATE</h1>
       </div>
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parse, isAfter, isBefore } from 'date-fns';
 import CountUp from 'react-countup';
+import api from '../../api/axios';
 
 const getLocationName = (locationValue) => {
   if (!locationValue) return '';
@@ -57,23 +58,15 @@ const ExamSchedulePage = () => {
       date: '30/03/2025',
       registrationPeriod: '20/01/2025 - 20/02/2025',
       resultAnnouncementDate: '16/04/2025',
-      ticketAnnouncementDate: '22/03/2025',
-      scores: {
-        total: 1064,
-        vietnamese: 264,
-        english: 276,
-        math: 255,
-        logic: 108,
-        science: 161,
-      },
+      ticketAnnouncementDate: '22/03/2025'
     },
     {
       id: 2,
       title: 'Kỳ thi ĐGNL đợt 2 năm 2025',
       date: '01/06/2025',
-      registrationPeriod: '17/04/2025 - 07/05/2025',
+      registrationPeriod: '17/04/2025 - 17/05/2025',
       resultAnnouncementDate: '16/06/2025',
-      ticketAnnouncementDate: '24/05/2025',
+      ticketAnnouncementDate: '02/05/2025',
     },
   ];
 
@@ -153,12 +146,65 @@ const ExamSchedulePage = () => {
     navigate('/payment-success', { state: { registrationData: updatedRegistrationData } });
   };
 
-  const handleDownloadTicket = () => {
-    alert('Tải giấy báo dự thi...');
+  const handleDownloadTicket = async (examId) =>  {
+    try {
+      // Sử dụng responseType: 'blob' để nhận dữ liệu dạng blob
+      const response = await api.get('/api/get-application-report', {
+        params: {
+          cccd: '050107072704',
+          dot_thi: examId
+        },
+        responseType: 'blob' // Quan trọng!
+      });
+      
+      // Tạo URL từ blob
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      
+      // Tạo thẻ a để tải xuống
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `giay_bao_du_thi.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      
+      // Dọn dẹp
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Lỗi khi tải giấy báo dự thi:', error);
+      alert('Không thể tải giấy báo dự thi. Vui lòng thử lại sau.');
+    }
   };
 
-  const handleDownloadResult = () => {
-    alert('Tải kết quả thi...');
+  const handleDownloadResult = async () => {
+    try {
+      // Sử dụng responseType: 'blob' để nhận dữ liệu dạng blob
+      const response = await api.get('/api/get-result-report', {
+        params: {
+          cccd: '050107072704'
+        },
+        responseType: 'blob' // Quan trọng!
+      });
+      
+      // Tạo URL từ blob
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      
+      // Tạo thẻ a để tải xuống
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ket_qua_thi.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      
+      // Dọn dẹp
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Lỗi khi tải giấy báo kết quả:', error);
+      alert('Không thể tải giấy báo kết quả. Vui lòng thử lại sau.');
+    }
   };
 
   const handleRequestReview = () => {
@@ -505,7 +551,7 @@ const ExamSchedulePage = () => {
                                 ) : isAfterTicketAnnouncement ? (
                                   <button
                                     className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a] transition transform hover:scale-105"
-                                    onClick={handleDownloadTicket}
+                                    onClick={() => handleDownloadTicket(exam.id)}
                                   >
                                     Tải giấy báo dự thi
                                   </button>
@@ -537,9 +583,22 @@ const ExamSchedulePage = () => {
                                 Đăng ký
                               </button>
                             ) : (
-                              <p className="text-sm text-red-500 font-medium">
-                                {isBeforeRegistration ? 'Chưa mở đăng ký' : 'Không thể đăng ký'}
-                              </p>
+                              <div className="text-sm text-red-500 font-medium">
+                                <div className="flex space-x-2">
+                                  <button
+                                    className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a]"
+                                    onClick={handleDownloadResult}
+                                  >
+                                    Tải kết quả thi
+                                  </button>
+                                  <button
+                                    className="px-4 py-2 bg-[#0056B3] text-white text-sm font-bold rounded hover:bg-[#003f8a]"
+                                    onClick={ () => handleDownloadTicket(exam.id) }
+                                  >
+                                    Tải giấy báo dự thi
+                                  </button>
+                                </div>
+                              </div>
                             )}
                           </div>
                         </div>
